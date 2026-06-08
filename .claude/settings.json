@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__stitch__generate_screen_from_text",
+      "Bash(file assets/app/profile.jpeg)",
+      "Bash(python3 -c \"from PIL import Image; im=Image.open\\('assets/app/profile.jpeg'\\); print\\('Dimensions:', im.size, 'Mode:', im.mode\\)\")",
+      "Bash(powershell -Command 'Add-Type -AssemblyName System.Drawing; $img=[System.Drawing.Image]::FromFile\\('\\\\''n:\\\\Dev\\\\Portfolio Apps\\\\Portfolio App\\\\assets\\\\app\\\\profile.jpeg'\\\\''\\); Write-Output \"Dimensions: $\\($img.Width\\)x$\\($img.Height\\)\"; $img.Dispose\\(\\)')",
+      "Bash(python3 -c \"from PIL import Image; im=Image.open\\('assets/app/profile.jpeg'\\); print\\('Now:', im.size\\)\")",
+      "Bash(flutter build *)",
+      "Bash(rm -f b.log)",
+      "Bash(python3 -c ' *)",
+      "Bash(cp \"build/flutter_assets/assets/app/profile.jpeg\" \"assets/app/profile.jpeg\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('Restored:', Image.open\\('assets/app/profile.jpeg'\\).size\\)\")"
+    ]
+  }
+}
