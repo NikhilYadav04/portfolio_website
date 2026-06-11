@@ -416,6 +416,7 @@ class _ProfileCard extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class _ExperienceCard extends StatelessWidget {
@@ -431,10 +432,14 @@ class _ExperienceCard extends StatelessWidget {
           const _CardBadge(icon: Icons.work_outline),
           const SizedBox(height: 20),
           Text("Experience", style: _titleStyle(ink)),
-          const SizedBox(height: 22),
-          _role(ink, "Lead Developer", "TechFlow • Present", true),
-          const SizedBox(height: 18),
-          _role(ink, "Senior UI Eng", "Vanguard • 2021-2023", false),
+          const Spacer(),
+          _role(ink, "Summer Research Intern", "NIT Calicut • Present", true),
+          const SizedBox(height: 16),
+          _role(ink, "SDE Intern", "Navicon Infraprojects • Present", true),
+          const SizedBox(height: 16),
+          _role(ink, "Technical Contributor", "SNDT University • 2025", false),
+          const SizedBox(height: 16),
+          _role(ink, "App Dev Intern", "Boomlex Technologies • 2025", false),
           const Spacer(),
           _ViewButton(
               label: "VIEW TIMELINE",
@@ -541,15 +546,18 @@ class _SkillsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
-    final soft = context.watch<CurrentState>().softAccent;
+    final state = context.watch<CurrentState>();
+    final ink = state.inkAccent;
+    final soft = state.softAccent;
     const skills = [
-      "React",
-      "TypeScript",
-      "Figma",
-      "Tailwind",
-      "UX Design",
-      "Next.js"
+      "Flutter",
+      "Dart",
+      "Python",
+      "C++",
+      "Node.js",
+      "FastAPI",
+      "LangGraph",
+      "MongoDB",
     ];
     return _SectionShell(
       child: Column(
@@ -558,7 +566,7 @@ class _SkillsCard extends StatelessWidget {
           const _CardBadge(icon: Icons.code),
           const SizedBox(height: 20),
           Text("Skills", style: _titleStyle(ink)),
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -580,11 +588,51 @@ class _SkillsCard extends StatelessWidget {
             }).toList(),
           ),
           const Spacer(),
+          // Competitive-programming proof tiles fill the lower half.
+          Row(
+            children: [
+              Expanded(
+                child: _cpTile(state, "CodeChef", "3★ (1616)"),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: _cpTile(state, "LeetCode", "Knight (1868)"),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           _ViewButton(
               label: "VIEW STACK",
               onTap: () => context
                   .read<CurrentState>()
                   .changePhoneScreen(const SkillsDetail(), true)),
+        ],
+      ),
+    );
+  }
+
+  Widget _cpTile(CurrentState state, String platform, String rank) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: state.accent.withOpacity(0.3)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(platform,
+              style: GoogleFonts.inter(
+                  color: state.inkAccent.withOpacity(0.7),
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w600)),
+          const SizedBox(height: 2),
+          Text(rank,
+              style: GoogleFonts.inter(
+                  color: state.inkAccent,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.5)),
         ],
       ),
     );
@@ -604,14 +652,16 @@ class _EducationCard extends StatelessWidget {
           const _CardBadge(icon: Icons.school_outlined),
           const SizedBox(height: 20),
           Text("Education", style: _titleStyle(ink)),
-          const SizedBox(height: 10),
-          Text(
-            "Academic Background",
-            style: GoogleFonts.inter(
-              color: ink.withOpacity(0.7),
-              fontSize: 14,
-            ),
-          ),
+          const Spacer(),
+          _entry(ink, "B.Tech, ECE", "IIIT Ranchi • 2023–2027", "8.96 CGPA",
+              true),
+          const SizedBox(height: 16),
+          _entry(ink, "HSC", "Kamaladevi College • 2020–2022", "80.83%",
+              false),
+          const SizedBox(height: 16),
+          _entry(
+              ink, "SSC", "St. Mary's High School • 2016–2020", "93.00%",
+              false),
           const Spacer(),
           _ViewButton(
               label: "VIEW DEGREES",
@@ -622,14 +672,86 @@ class _EducationCard extends StatelessWidget {
       ),
     );
   }
+
+  Widget _entry(
+      Color ink, String title, String sub, String grade, bool filled) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 4),
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: filled ? ink : Colors.transparent,
+            border: Border.all(color: ink, width: 1.5),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(title,
+                        style: GoogleFonts.inter(
+                            color: ink,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15)),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.55),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: ink.withOpacity(0.25)),
+                    ),
+                    child: Text(grade,
+                        style: GoogleFonts.inter(
+                            color: ink,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 10.5)),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 2),
+              Text(sub,
+                  style: GoogleFonts.inter(
+                      color: ink.withOpacity(0.6), fontSize: 12)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class _ContactCard extends StatelessWidget {
   const _ContactCard();
 
+  static const _links = [
+    (Icons.code, "GitHub", "https://github.com/NikhilYadav04"),
+    (
+      Icons.work_outline,
+      "LinkedIn",
+      "https://www.linkedin.com/in/nikhil-yadav-1a14062a2"
+    ),
+    (
+      Icons.camera_alt_outlined,
+      "Instagram",
+      "https://www.instagram.com/yadav_17_05/"
+    ),
+    (Icons.mail_outline, "Email", "mailto:byadav1723@gmail.com"),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
+    final state = context.watch<CurrentState>();
+    final ink = state.inkAccent;
     return _SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -637,12 +759,56 @@ class _ContactCard extends StatelessWidget {
           const _CardBadge(icon: Icons.mail_outline),
           const SizedBox(height: 20),
           Text("Contact", style: _titleStyle(ink)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
-            "Get in Touch",
+            "Open to internships, freelance\n& collaborations.",
             style: GoogleFonts.inter(
               color: ink.withOpacity(0.7),
-              fontSize: 14,
+              fontSize: 13.5,
+              height: 1.4,
+            ),
+          ),
+          const Spacer(),
+          // Tappable social tiles — direct links from the home card.
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: _links.map((l) {
+              return GestureDetector(
+                onTap: () =>
+                    context.read<CurrentState>().launchInBrowser(l.$3),
+                child: Column(
+                  children: [
+                    Container(
+                      width: 52,
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.6),
+                        borderRadius: BorderRadius.circular(16),
+                        border:
+                            Border.all(color: state.accent.withOpacity(0.3)),
+                      ),
+                      child: Icon(l.$1, color: ink, size: 22),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(l.$2,
+                        style: GoogleFonts.inter(
+                            color: ink.withOpacity(0.7),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600)),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 18),
+          Center(
+            child: Text(
+              "byadav1723@gmail.com",
+              style: GoogleFonts.inter(
+                color: ink.withOpacity(0.6),
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           const Spacer(),

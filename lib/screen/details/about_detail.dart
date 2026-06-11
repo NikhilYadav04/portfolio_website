@@ -12,7 +12,6 @@ class AboutDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
-    final ink = state.inkAccent;
     final accent = state.accent;
 
     return DetailScaffold(
@@ -46,13 +45,17 @@ class AboutDetail extends StatelessWidget {
         Center(
           child: Text("Nikhil Yadav",
               style: GoogleFonts.inter(
-                  color: ink, fontWeight: FontWeight.w800, fontSize: 22)),
+                  color: state.textPrimary,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22)),
         ),
         const SizedBox(height: 4),
         Center(
           child: Text("Flutter Developer & AI Agent Engineer",
               style: GoogleFonts.inter(
-                  color: ink.withOpacity(0.65), fontSize: 12.5)),
+                  color: state.inkAccent,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12.5)),
         ),
         const SizedBox(height: 16),
         // Fact chips.
@@ -74,7 +77,9 @@ class AboutDetail extends StatelessWidget {
             children: [
               Text("Philosophy",
                   style: GoogleFonts.inter(
-                      color: ink, fontWeight: FontWeight.w700, fontSize: 17)),
+                      color: state.textPrimary,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17)),
               const SizedBox(height: 12),
               Text(
                 "I bridge the gap between elegant design and robust architecture. "
@@ -85,7 +90,9 @@ class AboutDetail extends StatelessWidget {
                 "that clean code is the foundation of inclusive, accessible, and "
                 "delightful user experiences.",
                 style: GoogleFonts.inter(
-                    color: ink.withOpacity(0.75), fontSize: 13, height: 1.55),
+                    color: state.textPrimary.withOpacity(0.85),
+                    fontSize: 13,
+                    height: 1.55),
               ),
             ],
           ),
@@ -95,13 +102,13 @@ class AboutDetail extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _stat(ink, Icons.rocket_launch_outlined, "12+",
+              child: _stat(state, Icons.rocket_launch_outlined, "12+",
                   "Apps Shipped"),
             ),
             const SizedBox(width: 14),
             Expanded(
               child:
-                  _stat(ink, Icons.groups_outlined, "500k+", "Users Reached"),
+                  _stat(state, Icons.groups_outlined, "500k+", "Users Reached"),
             ),
           ],
         ),
@@ -109,20 +116,23 @@ class AboutDetail extends StatelessWidget {
     );
   }
 
-  Widget _stat(Color ink, IconData icon, String value, String label) {
+  Widget _stat(
+      CurrentState state, IconData icon, String value, String label) {
     return GlassCard(
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
       child: Column(
         children: [
-          Icon(icon, color: ink, size: 26),
+          Icon(icon, color: state.inkAccent, size: 26),
           const SizedBox(height: 10),
           Text(value,
               style: GoogleFonts.inter(
-                  color: ink, fontWeight: FontWeight.w800, fontSize: 22)),
+                  color: state.inkAccent,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 22)),
           const SizedBox(height: 2),
           Text(label,
               style: GoogleFonts.inter(
-                  color: ink.withOpacity(0.6), fontSize: 11.5)),
+                  color: state.textMuted, fontSize: 11.5)),
         ],
       ),
     );

@@ -89,7 +89,7 @@ class _GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
+    final state = context.watch<CurrentState>();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: GlassCard(
@@ -98,11 +98,22 @@ class _GroupCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(group.icon, size: 18, color: ink),
-                const SizedBox(width: 8),
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: state.accent.withOpacity(0.14),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child:
+                      Icon(group.icon, size: 18, color: state.inkAccent),
+                ),
+                const SizedBox(width: 10),
                 Text(group.title,
                     style: GoogleFonts.inter(
-                        color: ink, fontWeight: FontWeight.w700, fontSize: 15)),
+                        color: state.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15)),
               ],
             ),
             const SizedBox(height: 14),
@@ -126,7 +137,6 @@ class _CpCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
-    final ink = state.inkAccent;
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: GlassCard(
@@ -135,11 +145,22 @@ class _CpCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.emoji_events_outlined, size: 18, color: ink),
-                const SizedBox(width: 8),
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: state.accent.withOpacity(0.14),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(Icons.emoji_events_outlined,
+                      size: 18, color: state.inkAccent),
+                ),
+                const SizedBox(width: 10),
                 Text("Competitive Programming",
                     style: GoogleFonts.inter(
-                        color: ink, fontWeight: FontWeight.w700, fontSize: 15)),
+                        color: state.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15)),
               ],
             ),
             const SizedBox(height: 14),
@@ -151,21 +172,23 @@ class _CpCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 12, vertical: 12),
                     decoration: BoxDecoration(
-                      color: state.softAccent,
+                      color: state.accent.withOpacity(0.10),
                       borderRadius: BorderRadius.circular(14),
+                      border:
+                          Border.all(color: state.accent.withOpacity(0.3)),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(s.platform,
                             style: GoogleFonts.inter(
-                                color: ink.withOpacity(0.65),
+                                color: state.textMuted,
                                 fontSize: 11,
                                 fontWeight: FontWeight.w600)),
                         const SizedBox(height: 3),
                         Text(s.rank,
                             style: GoogleFonts.inter(
-                                color: ink,
+                                color: state.inkAccent,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 14)),
                       ],

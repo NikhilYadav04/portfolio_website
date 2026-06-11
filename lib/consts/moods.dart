@@ -178,4 +178,12 @@ extension MoodSurfaces on MoodSpec {
       0.38,
     ).toColor();
   }
+
+  /// Primary content text — near-black slate with the faintest hint of the
+  /// mood hue. Titles and body copy use this so content reads neutrally and
+  /// the accent is reserved for emphasis (companies, icons, pills, chips).
+  Color get textPrimary => _mix(const Color(0xFF1E293B), accent, 0.08);
+
+  /// Secondary/meta text — muted slate for dates, locations, captions.
+  Color get textMuted => _mix(const Color(0xFF64748B), accent, 0.08);
 }

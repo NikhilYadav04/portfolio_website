@@ -41,7 +41,9 @@ class ContactDetail extends StatelessWidget {
         Center(
           child: Text("Let's connect!",
               style: GoogleFonts.inter(
-                  color: ink, fontWeight: FontWeight.w800, fontSize: 24)),
+                  color: state.textPrimary,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 24)),
         ),
         const SizedBox(height: 8),
         Center(
@@ -52,7 +54,7 @@ class ContactDetail extends StatelessWidget {
               "opportunities to be part of your visions.",
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
-                  color: ink.withOpacity(0.7), fontSize: 13, height: 1.5),
+                  color: state.textMuted, fontSize: 13, height: 1.5),
             ),
           ),
         ),
@@ -116,6 +118,7 @@ class ContactDetail extends StatelessWidget {
 
   Widget _social(BuildContext context, Color ink, IconData icon, String label,
       String url) {
+    final textPrimary = context.read<CurrentState>().textPrimary;
     return GestureDetector(
       onTap: () => context.read<CurrentState>().launchInBrowser(url),
       behavior: HitTestBehavior.opaque,
@@ -127,7 +130,9 @@ class ContactDetail extends StatelessWidget {
             const SizedBox(height: 10),
             Text(label,
                 style: GoogleFonts.inter(
-                    color: ink, fontWeight: FontWeight.w600, fontSize: 13)),
+                    color: textPrimary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13)),
           ],
         ),
       ),

@@ -31,16 +31,18 @@ class ProjectsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
+    final state = context.watch<CurrentState>();
     return DetailScaffold(
       title: "Portfolio",
       children: [
         Text("Projects",
             style: GoogleFonts.inter(
-                color: ink, fontWeight: FontWeight.w800, fontSize: 28)),
+                color: state.textPrimary,
+                fontWeight: FontWeight.w800,
+                fontSize: 28)),
         const SizedBox(height: 4),
         Text("A curated selection of recent work.",
-            style: GoogleFonts.inter(color: ink.withOpacity(0.65), fontSize: 13)),
+            style: GoogleFonts.inter(color: state.textMuted, fontSize: 13)),
         const SizedBox(height: 18),
         for (final p in _projects) _ProjectCard(project: p),
       ],
@@ -66,7 +68,7 @@ class _ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
-    final ink = state.inkAccent;
+    final ink = state.textPrimary;
     final accent = state.accent;
 
     return Padding(
@@ -130,7 +132,7 @@ class _ProjectCard extends StatelessWidget {
                   ),
                   child: Text("View Project",
                       style: GoogleFonts.inter(
-                          color: ink,
+                          color: state.inkAccent,
                           fontWeight: FontWeight.w700,
                           fontSize: 12)),
                 ),

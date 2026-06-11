@@ -49,7 +49,7 @@ class DetailScaffold extends StatelessWidget {
                       title,
                       textAlign: TextAlign.center,
                       style: GoogleFonts.inter(
-                        color: state.inkAccent,
+                        color: state.textPrimary,
                         fontWeight: FontWeight.w700,
                         fontSize: 17,
                       ),
@@ -84,18 +84,26 @@ class GlassCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fill = context.watch<CurrentState>().cardFill;
+    final state = context.watch<CurrentState>();
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: Colors.white.withOpacity(0.6)),
+        // Near-opaque white so content sits on a calm neutral surface and the
+        // card clearly lifts off the tinted background.
+        color: Colors.white.withOpacity(0.92),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white, width: 1.2),
         boxShadow: [
+          // Soft ambient + tight contact shadow: real elevation, not a blur smear.
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: state.accent.withOpacity(0.14),
+            blurRadius: 24,
+            offset: const Offset(0, 12),
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -117,9 +125,9 @@ class SoftChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
       decoration: BoxDecoration(
-        color: state.softAccent,
+        color: state.softAccent.withOpacity(0.55),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.6)),
+        border: Border.all(color: state.accent.withOpacity(0.35)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

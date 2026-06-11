@@ -29,6 +29,8 @@ class CurrentState extends ChangeNotifier {
   Color get cardFill => mood.cardFill;
   Color get softAccent => mood.softAccent;
   Color get inkAccent => mood.inkAccent;
+  Color get textPrimary => mood.textPrimary;
+  Color get textMuted => mood.textMuted;
 
   /// Index of the current mood in [moods] — the picker uses this to show which
   /// swatch is selected (replaces the old `selectedColor`).
