@@ -25,11 +25,12 @@ class ExperienceDetail extends StatelessWidget {
     ),
     _Role(
       dates: "Jan 2026 - Present",
-      title: "SDE Intern",
+      title: "Software Developer Intern",
       company: "Navicon Infraprojects Pvt. Ltd.",
       kind: "Internship",
       location: "Noida, Uttar Pradesh · Remote",
       bullets: [],
+      logo: "assets/exp/navicon.png",
       current: true,
     ),
     _Role(

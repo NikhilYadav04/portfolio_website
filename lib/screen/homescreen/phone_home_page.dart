@@ -422,25 +422,39 @@ class _ProfileCard extends StatelessWidget {
 class _ExperienceCard extends StatelessWidget {
   const _ExperienceCard();
 
+  static const _roles = [
+    ["Summer Research Intern", "NIT Calicut", "Present", "1"],
+    ["Software Developer Intern", "Navicon Infraprojects", "Present", "1"],
+    ["Technical Contributor", "SNDT University", "2025", "0"],
+    ["App Development Intern", "Boomlex Technologies", "2025", "0"],
+    ["Open Source Contributor", "GirlScript SoC", "Present", "1"],
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
+    final state = context.watch<CurrentState>();
     return _SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _CardBadge(icon: Icons.work_outline),
+          const SizedBox(height: 18),
+          Text("Experience", style: _titleStyle(state.inkAccent)),
+          const SizedBox(height: 4),
+          Text("${_roles.length} roles · 3 currently active",
+              style: GoogleFonts.inter(
+                  color: state.textMuted, fontSize: 12.5)),
           const SizedBox(height: 20),
-          Text("Experience", style: _titleStyle(ink)),
-          const Spacer(),
-          _role(ink, "Summer Research Intern", "NIT Calicut • Present", true),
-          const SizedBox(height: 16),
-          _role(ink, "SDE Intern", "Navicon Infraprojects • Present", true),
-          const SizedBox(height: 16),
-          _role(ink, "Technical Contributor", "SNDT University • 2025", false),
-          const SizedBox(height: 16),
-          _role(ink, "App Dev Intern", "Boomlex Technologies • 2025", false),
-          const Spacer(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < _roles.length; i++)
+                  _role(state, _roles[i], isLast: i == _roles.length - 1),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
           _ViewButton(
               label: "VIEW TIMELINE",
               onTap: () => context
@@ -451,34 +465,72 @@ class _ExperienceCard extends StatelessWidget {
     );
   }
 
-  Widget _role(Color ink, String title, String sub, bool filled) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: filled ? ink : Colors.transparent,
-            border: Border.all(color: ink, width: 1.5),
+  Widget _role(CurrentState state, List<String> r, {required bool isLast}) {
+    final bool present = r[3] == "1";
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Timeline rail: dot + connector.
+          Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 4),
+                width: 9,
+                height: 9,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: present ? state.accent : Colors.white,
+                  border: Border.all(color: state.accent, width: 1.8),
+                ),
+              ),
+              if (!isLast)
+                Expanded(
+                  child: Container(
+                      width: 1.5,
+                      color: state.accent.withOpacity(0.22)),
+                ),
+            ],
           ),
-        ),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title,
-                style: GoogleFonts.inter(
-                    color: ink, fontWeight: FontWeight.w700, fontSize: 16)),
-            const SizedBox(height: 2),
-            Text(sub,
-                style: GoogleFonts.inter(
-                    color: ink.withOpacity(0.6), fontSize: 12.5)),
-          ],
-        ),
-      ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(r[0],
+                            style: GoogleFonts.inter(
+                                color: state.textPrimary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.5)),
+                      ),
+                      if (present) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: state.accent,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text("${r[1]} · ${r[2]}",
+                      style: GoogleFonts.inter(
+                          color: state.textMuted, fontSize: 11.5)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -497,22 +549,33 @@ class _ProjectsCard extends StatelessWidget {
           const _CardBadge(icon: Icons.grid_view),
           const SizedBox(height: 20),
           Text("Projects", style: _titleStyle(ink)),
-          const SizedBox(height: 18),
+          const SizedBox(height: 4),
+          Text("5 featured builds",
+              style: GoogleFonts.inter(
+                  color: context.watch<CurrentState>().textMuted,
+                  fontSize: 12.5)),
+          const SizedBox(height: 14),
           Expanded(
-            child: GridView.count(
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
+            child: Column(
               children: [
-                _tile(accent, 0.9, Icons.insights),
-                _tile(accent, 0.6, Icons.phone_iphone),
-                _tile(accent, 0.25, Icons.terminal),
-                _tile(accent, 0.25, Icons.devices),
+                _row(context, accent, "assets/app/pillbin.webp",
+                    Icons.medication_outlined, "PillBin",
+                    "Offline-first medicine manager"),
+                _row(context, accent, "assets/app/trial.png",
+                    Icons.biotech_outlined, "TrialMatch",
+                    "AI clinical trial matching"),
+                _row(context, accent, "assets/app/story.png",
+                    Icons.movie_filter_outlined, "Storyboardiac",
+                    "AI screenwriting & storyboards"),
+                _row(context, accent, null, Icons.receipt_long_outlined,
+                    "SplitEase", "Real-time expense splitting"),
+                _row(context, accent, "assets/app/attend.png",
+                    Icons.fingerprint, "Attend Ease",
+                    "Attendance & leave management"),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 6),
           _ViewButton(
               label: "VIEW GALLERY",
               onTap: () => context
@@ -523,20 +586,50 @@ class _ProjectsCard extends StatelessWidget {
     );
   }
 
-  Widget _tile(Color accent, double strength, IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            accent.withOpacity(0.15 + strength * 0.5),
-            accent.withOpacity(0.08 + strength * 0.25),
-          ],
-        ),
+  Widget _row(BuildContext context, Color accent, String? logo, IconData icon,
+      String name, String sub) {
+    final state = context.watch<CurrentState>();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 9),
+      child: Row(
+        children: [
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              color: logo != null ? Colors.white : accent.withOpacity(0.14),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: logo != null
+                ? Image.asset(
+                    logo,
+                    fit: BoxFit.cover,
+                    filterQuality: FilterQuality.medium,
+                    cacheWidth: 108,
+                    errorBuilder: (_, __, ___) =>
+                        Icon(icon, size: 19, color: state.inkAccent),
+                  )
+                : Icon(icon, size: 19, color: state.inkAccent),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name,
+                    style: GoogleFonts.inter(
+                        color: state.textPrimary,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13)),
+                Text(sub,
+                    style: GoogleFonts.inter(
+                        color: state.textMuted, fontSize: 10.5)),
+              ],
+            ),
+          ),
+        ],
       ),
-      child: Icon(icon, color: Colors.white.withOpacity(0.85), size: 26),
     );
   }
 }
@@ -642,27 +735,37 @@ class _SkillsCard extends StatelessWidget {
 class _EducationCard extends StatelessWidget {
   const _EducationCard();
 
+  static const _entries = [
+    ["B.Tech, ECE", "IIIT Ranchi · 2023–2027", "8.96 CGPA", "1"],
+    ["HSC", "Kamaladevi College · 2020–2022", "80.83%", "0"],
+    ["SSC", "St. Mary's High School · 2016–2020", "93.00%", "0"],
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final ink = context.watch<CurrentState>().inkAccent;
+    final state = context.watch<CurrentState>();
     return _SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const _CardBadge(icon: Icons.school_outlined),
+          const SizedBox(height: 18),
+          Text("Education", style: _titleStyle(state.inkAccent)),
+          const SizedBox(height: 4),
+          Text("Academic journey",
+              style: GoogleFonts.inter(
+                  color: state.textMuted, fontSize: 12.5)),
           const SizedBox(height: 20),
-          Text("Education", style: _titleStyle(ink)),
-          const Spacer(),
-          _entry(ink, "B.Tech, ECE", "IIIT Ranchi • 2023–2027", "8.96 CGPA",
-              true),
-          const SizedBox(height: 16),
-          _entry(ink, "HSC", "Kamaladevi College • 2020–2022", "80.83%",
-              false),
-          const SizedBox(height: 16),
-          _entry(
-              ink, "SSC", "St. Mary's High School • 2016–2020", "93.00%",
-              false),
-          const Spacer(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (int i = 0; i < _entries.length; i++)
+                  _entry(state, _entries[i], isLast: i == _entries.length - 1),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
           _ViewButton(
               label: "VIEW DEGREES",
               onTap: () => context
@@ -673,59 +776,74 @@ class _EducationCard extends StatelessWidget {
     );
   }
 
-  Widget _entry(
-      Color ink, String title, String sub, String grade, bool filled) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 4),
-          width: 8,
-          height: 8,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: filled ? ink : Colors.transparent,
-            border: Border.all(color: ink, width: 1.5),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _entry(CurrentState state, List<String> e, {required bool isLast}) {
+    final bool current = e[3] == "1";
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(title,
-                        style: GoogleFonts.inter(
-                            color: ink,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 15)),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.55),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: ink.withOpacity(0.25)),
-                    ),
-                    child: Text(grade,
-                        style: GoogleFonts.inter(
-                            color: ink,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 10.5)),
-                  ),
-                ],
+              Container(
+                margin: const EdgeInsets.only(top: 4),
+                width: 9,
+                height: 9,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: current ? state.accent : Colors.white,
+                  border: Border.all(color: state.accent, width: 1.8),
+                ),
               ),
-              const SizedBox(height: 2),
-              Text(sub,
-                  style: GoogleFonts.inter(
-                      color: ink.withOpacity(0.6), fontSize: 12)),
+              if (!isLast)
+                Expanded(
+                  child: Container(
+                      width: 1.5, color: state.accent.withOpacity(0.22)),
+                ),
             ],
           ),
-        ),
-      ],
+          const SizedBox(width: 12),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(e[0],
+                            style: GoogleFonts.inter(
+                                color: state.textPrimary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14.5)),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: state.accent.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(10),
+                          border:
+                              Border.all(color: state.accent.withOpacity(0.3)),
+                        ),
+                        child: Text(e[2],
+                            style: GoogleFonts.inter(
+                                color: state.inkAccent,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 10.5)),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(e[1],
+                      style: GoogleFonts.inter(
+                          color: state.textMuted, fontSize: 11.5)),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

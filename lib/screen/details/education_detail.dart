@@ -16,7 +16,6 @@ class EducationDetail extends StatelessWidget {
       institution: "Indian Institute of Information Technology Ranchi",
       gradeLabel: "CGPA",
       gradeValue: "8.96",
-      tags: ["Flutter", "Express.js", "+14 skills"],
       logo: "assets/edu/iiit.jpg",
     ),
     _Edu(
@@ -64,7 +63,6 @@ class _Edu {
   final String institution;
   final String gradeLabel;
   final String gradeValue;
-  final List<String> tags;
   final String? logo;
   const _Edu({
     required this.dates,
@@ -72,7 +70,6 @@ class _Edu {
     required this.institution,
     required this.gradeLabel,
     required this.gradeValue,
-    this.tags = const [],
     this.logo,
   });
 }
@@ -197,46 +194,40 @@ class _EduCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // Grade stat pill + tags on one row (wraps if tight).
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                decoration: BoxDecoration(
-                  color: state.accent.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: state.accent.withOpacity(0.35)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      edu.gradeLabel,
-                      style: GoogleFonts.inter(
-                        color: state.textMuted,
-                        fontSize: 10.5,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      edu.gradeValue,
-                      style: GoogleFonts.inter(
-                        color: state.inkAccent,
-                        fontSize: 13.5,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ],
-                ),
+          // Grade stat pill.
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: state.accent.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: state.accent.withOpacity(0.35)),
               ),
-              ...edu.tags.map((t) => SoftChip(label: t)),
-            ],
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    edu.gradeLabel,
+                    style: GoogleFonts.inter(
+                      color: state.textMuted,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    edu.gradeValue,
+                    style: GoogleFonts.inter(
+                      color: state.inkAccent,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
