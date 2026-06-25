@@ -76,6 +76,7 @@ flutter:
     - assets/app/
     - assets/exp/
     - assets/edu/
+    - assets/proj/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

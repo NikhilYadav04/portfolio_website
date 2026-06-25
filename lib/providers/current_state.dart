@@ -56,13 +56,28 @@ class CurrentState extends ChangeNotifier {
 
   /// Feed a raw global pointer position + the screen size; we normalize here so
   /// callers stay dumb. Clamped to [-1, 1].
+  ///
+  /// The raw value is eased toward (low-pass filtered) and small deltas are
+  /// ignored, so the parallax glides instead of snapping on every pixel of
+  /// mouse movement — far smoother and far fewer rebuilds.
   void updatePointer(Offset position, Size size) {
     if (size.width == 0 || size.height == 0) return;
     final double nx = ((position.dx / size.width) * 2 - 1).clamp(-1.0, 1.0);
     final double ny = ((position.dy / size.height) * 2 - 1).clamp(-1.0, 1.0);
-    final Offset next = Offset(nx, ny);
-    if (next == pointer) return;
-    pointer = next;
+
+    // Ease toward the target (0..1; lower = smoother/heavier).
+    const double ease = 0.18;
+    final Offset eased = Offset(
+      pointer.dx + (nx - pointer.dx) * ease,
+      pointer.dy + (ny - pointer.dy) * ease,
+    );
+
+    // Skip near-identical updates so we don't rebuild on micro-movements.
+    if ((eased.dx - pointer.dx).abs() < 0.004 &&
+        (eased.dy - pointer.dy).abs() < 0.004) {
+      return;
+    }
+    pointer = eased;
     notifyListeners();
   }
 

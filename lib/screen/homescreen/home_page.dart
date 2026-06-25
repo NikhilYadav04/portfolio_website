@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
               : Container(),
           // Clouds drift on the shallowest parallax layer (feel farthest away).
           ParallaxLayer(
-            depth: 5,
+            depth: 3,
             child: Selector<CurrentState, String>(
               selector: (context, provider) => provider.selectedCloud,
               builder: (context, cloud, __) {
@@ -102,7 +102,7 @@ class HomePage extends StatelessWidget {
                   phone
                       ? Container()
                       : ParallaxLayer(
-                        depth: 10,
+                        depth: 6,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -188,7 +188,7 @@ class HomePage extends StatelessWidget {
                   // main mobile screen — sits on a mid parallax layer and
                   // tilts in 3D toward the cursor (Phase 1).
                   ParallaxLayer(
-                    depth: 7,
+                    depth: 4,
                     child: CursorTilt(
                       child: SizedBox(
                         height: size.height - 100,
@@ -212,7 +212,7 @@ class HomePage extends StatelessWidget {
                   phone
                       ? Container()
                       : ParallaxLayer(
-                        depth: 10,
+                        depth: 6,
                         child: Column(
                           children: [
                             Transform(

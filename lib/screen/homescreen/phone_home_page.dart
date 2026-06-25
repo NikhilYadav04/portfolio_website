@@ -538,6 +538,36 @@ class _ExperienceCard extends StatelessWidget {
 class _ProjectsCard extends StatelessWidget {
   const _ProjectsCard();
 
+  // [name, subtitle, logo (or null), iconKey] — all 7, strongest first.
+  static const _projects = [
+    ["PillBin", "Offline-first medicine manager", "assets/app/pillbin.webp", "med"],
+    ["TrialMatch", "AI clinical trial matching", "assets/app/trial.png", "bio"],
+    ["Storyboardiac", "AI screenwriting & storyboards", "assets/app/story.png", "movie"],
+    ["ChatConnect", "Real-time chat, voice & video", null, "chat"],
+    ["Code DNA", "GitHub profile as an organism", null, "dna"],
+    ["SplitEase", "Real-time expense splitting", null, "receipt"],
+    ["Attend Ease", "Attendance & leave management", "assets/app/attend.png", "finger"],
+  ];
+
+  IconData _iconFor(String key) {
+    switch (key) {
+      case "med":
+        return Icons.medication_outlined;
+      case "bio":
+        return Icons.biotech_outlined;
+      case "movie":
+        return Icons.movie_filter_outlined;
+      case "chat":
+        return Icons.chat_bubble_outline;
+      case "dna":
+        return Icons.biotech;
+      case "receipt":
+        return Icons.receipt_long_outlined;
+      default:
+        return Icons.fingerprint;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final ink = context.watch<CurrentState>().inkAccent;
@@ -550,32 +580,21 @@ class _ProjectsCard extends StatelessWidget {
           const SizedBox(height: 20),
           Text("Projects", style: _titleStyle(ink)),
           const SizedBox(height: 4),
-          Text("5 featured builds",
+          Text("7 featured builds",
               style: GoogleFonts.inter(
                   color: context.watch<CurrentState>().textMuted,
                   fontSize: 12.5)),
           const SizedBox(height: 14),
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _row(context, accent, "assets/app/pillbin.webp",
-                    Icons.medication_outlined, "PillBin",
-                    "Offline-first medicine manager"),
-                _row(context, accent, "assets/app/trial.png",
-                    Icons.biotech_outlined, "TrialMatch",
-                    "AI clinical trial matching"),
-                _row(context, accent, "assets/app/story.png",
-                    Icons.movie_filter_outlined, "Storyboardiac",
-                    "AI screenwriting & storyboards"),
-                _row(context, accent, null, Icons.receipt_long_outlined,
-                    "SplitEase", "Real-time expense splitting"),
-                _row(context, accent, "assets/app/attend.png",
-                    Icons.fingerprint, "Attend Ease",
-                    "Attendance & leave management"),
+                for (final p in _projects)
+                  _row(context, accent, p[2], _iconFor(p[3]!), p[0]!, p[1]!),
               ],
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
           _ViewButton(
               label: "VIEW GALLERY",
               onTap: () => context
@@ -589,13 +608,11 @@ class _ProjectsCard extends StatelessWidget {
   Widget _row(BuildContext context, Color accent, String? logo, IconData icon,
       String name, String sub) {
     final state = context.watch<CurrentState>();
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 9),
-      child: Row(
+    return Row(
         children: [
           Container(
-            width: 36,
-            height: 36,
+            width: 34,
+            height: 34,
             decoration: BoxDecoration(
               color: logo != null ? Colors.white : accent.withOpacity(0.14),
               borderRadius: BorderRadius.circular(10),
@@ -629,7 +646,6 @@ class _ProjectsCard extends StatelessWidget {
             ),
           ),
         ],
-      ),
     );
   }
 }

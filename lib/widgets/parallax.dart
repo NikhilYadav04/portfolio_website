@@ -33,9 +33,12 @@ class ParallaxLayer extends StatelessWidget {
           sign * pointer.dx * depth,
           sign * pointer.dy * depth,
         );
+        // The pointer is already low-pass smoothed in CurrentState, so keep
+        // this follow short — a long duration here would double-lag and feel
+        // mushy.
         return AnimatedSlide(
           offset: Offset(shift.dx / 100, shift.dy / 100),
-          duration: const Duration(milliseconds: 220),
+          duration: const Duration(milliseconds: 90),
           curve: Curves.easeOut,
           child: child,
         );
@@ -71,7 +74,7 @@ class CursorTilt extends StatelessWidget {
         final double rotX = (-pointer.dy * maxTilt).clamp(-maxTilt, maxTilt);
         return TweenAnimationBuilder<Offset>(
           tween: Tween(end: Offset(rotX, rotY)),
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 90),
           curve: Curves.easeOut,
           builder: (context, value, child) {
             return Transform(
