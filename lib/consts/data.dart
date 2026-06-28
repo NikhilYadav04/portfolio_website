@@ -299,7 +299,7 @@ final List<JobExperience> jobExperiences = [
 // ---------------------------------------------------------------------------
 
 const String developerName = "Nikhil Yadav";
-const String developerTagline = "Flutter Developer · AI Agent Engineer";
+const String developerTagline = "Building AI Agents & Mobile Apps";
 const String statusLine = "● currently building AI agents";
 const String localTimezoneLabel = "IST";
 

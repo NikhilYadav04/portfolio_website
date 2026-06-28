@@ -398,7 +398,7 @@ class _ProfileCard extends StatelessWidget {
           Text("Nikhil Yadav", style: _titleStyle(ink)),
           const SizedBox(height: 8),
           Text(
-            "Flutter Developer\n& AI Agent Engineer",
+            "Building AI Agents\n& Mobile Apps",
             textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               color: ink.withOpacity(0.7),

@@ -51,7 +51,7 @@ class AboutDetail extends StatelessWidget {
         ),
         const SizedBox(height: 4),
         Center(
-          child: Text("Flutter Developer & AI Agent Engineer",
+          child: Text("Building AI Agents & Mobile Apps",
               style: GoogleFonts.inter(
                   color: state.inkAccent,
                   fontWeight: FontWeight.w600,
