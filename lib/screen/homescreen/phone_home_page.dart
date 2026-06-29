@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/current_state.dart';
 import '../details/about_detail.dart';
-import '../details/contact_detail.dart';
+import '../details/achievements_detail.dart';
 import '../details/education_detail.dart';
 import '../details/experience_detail.dart';
 import '../details/projects_detail.dart';
@@ -35,7 +35,7 @@ class _PhoneHomeScreenState extends State<PhoneHomeScreen> {
     Icons.grid_view,
     Icons.bolt_outlined,
     Icons.school_outlined,
-    Icons.mail_outline,
+    Icons.emoji_events_outlined,
   ];
 
   void _goto(int i) {
@@ -83,7 +83,7 @@ class _PhoneHomeScreenState extends State<PhoneHomeScreen> {
                   _ProjectsCard(),
                   _SkillsCard(),
                   _EducationCard(),
-                  _ContactCard(),
+                  _AchievementsCard(),
                 ],
               ),
             ),
@@ -864,93 +864,91 @@ class _EducationCard extends StatelessWidget {
   }
 }
 
-class _ContactCard extends StatelessWidget {
-  const _ContactCard();
+class _AchievementsCard extends StatelessWidget {
+  const _AchievementsCard();
 
-  static const _links = [
-    (Icons.code, "GitHub", "https://github.com/NikhilYadav04"),
-    (
-      Icons.work_outline,
-      "LinkedIn",
-      "https://www.linkedin.com/in/nikhil-yadav-1a14062a2"
-    ),
-    (
-      Icons.camera_alt_outlined,
-      "Instagram",
-      "https://www.instagram.com/yadav_17_05/"
-    ),
-    (Icons.mail_outline, "Email", "mailto:byadav1723@gmail.com"),
+  // [icon-key, title, org] — top highlights previewed on the home card.
+  static const _items = [
+    ["trophy", "1st Prize — YPIPA Hackathon", "PillBin · 20+ teams"],
+    ["brush", "Best UI/UX — Cinecode 2026", "Storyboardiac"],
+    ["medal", "SIH Finalist", "Top 0.5% of 2500+ teams"],
+    ["merit", "Certificate of Merit — CIIA", "Mumbai · Top 50"],
   ];
+
+  IconData _iconFor(String key) {
+    switch (key) {
+      case "trophy":
+        return Icons.emoji_events;
+      case "brush":
+        return Icons.brush;
+      case "medal":
+        return Icons.workspace_premium;
+      default:
+        return Icons.military_tech;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
-    final ink = state.inkAccent;
     return _SectionShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _CardBadge(icon: Icons.mail_outline),
-          const SizedBox(height: 20),
-          Text("Contact", style: _titleStyle(ink)),
-          const SizedBox(height: 8),
-          Text(
-            "Open to internships, freelance\n& collaborations.",
-            style: GoogleFonts.inter(
-              color: ink.withOpacity(0.7),
-              fontSize: 13.5,
-              height: 1.4,
-            ),
-          ),
-          const Spacer(),
-          // Tappable social tiles — direct links from the home card.
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _links.map((l) {
-              return GestureDetector(
-                onTap: () =>
-                    context.read<CurrentState>().launchInBrowser(l.$3),
-                child: Column(
-                  children: [
-                    Container(
-                      width: 52,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.6),
-                        borderRadius: BorderRadius.circular(16),
-                        border:
-                            Border.all(color: state.accent.withOpacity(0.3)),
-                      ),
-                      child: Icon(l.$1, color: ink, size: 22),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(l.$2,
-                        style: GoogleFonts.inter(
-                            color: ink.withOpacity(0.7),
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600)),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+          const _CardBadge(icon: Icons.emoji_events_outlined),
           const SizedBox(height: 18),
-          Center(
-            child: Text(
-              "byadav1723@gmail.com",
+          Text("Achievements", style: _titleStyle(state.inkAccent)),
+          const SizedBox(height: 4),
+          Text("Awards & recognitions",
               style: GoogleFonts.inter(
-                color: ink.withOpacity(0.6),
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
+                  color: state.textMuted, fontSize: 12.5)),
+          const SizedBox(height: 18),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                for (final a in _items)
+                  Row(
+                    children: [
+                      Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: state.accent.withOpacity(0.14),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(_iconFor(a[0]),
+                            size: 19, color: state.inkAccent),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(a[1],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.inter(
+                                    color: state.textPrimary,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 13)),
+                            Text(a[2],
+                                style: GoogleFonts.inter(
+                                    color: state.textMuted, fontSize: 10.5)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
             ),
           ),
-          const Spacer(),
+          const SizedBox(height: 6),
           _ViewButton(
-              label: "SEND MESSAGE",
+              label: "VIEW ALL",
               onTap: () => context
                   .read<CurrentState>()
-                  .changePhoneScreen(const ContactDetail(), true)),
+                  .changePhoneScreen(const AchievementsDetail(), true)),
         ],
       ),
     );

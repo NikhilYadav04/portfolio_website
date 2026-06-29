@@ -64,31 +64,32 @@ class AboutDetail extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            SoftChip(label: "Vancouver, BC", icon: Icons.location_on_outlined),
-            SoftChip(label: "8+ Years Exp", icon: Icons.schedule),
-            SoftChip(label: "Product Strategy", icon: Icons.workspaces_outline),
+            SoftChip(label: "IIIT Ranchi", icon: Icons.school_outlined),
+            SoftChip(label: "1+ Yr Experience", icon: Icons.schedule),
+            SoftChip(label: "3 Internships", icon: Icons.work_outline),
           ],
         ),
         const SizedBox(height: 20),
-        // Philosophy card.
+        // About card.
         GlassCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Philosophy",
+              Text("About",
                   style: GoogleFonts.inter(
                       color: state.textPrimary,
                       fontWeight: FontWeight.w700,
                       fontSize: 17)),
               const SizedBox(height: 12),
               Text(
-                "I bridge the gap between elegant design and robust architecture. "
-                "My passion lies in crafting user interfaces that feel native, "
-                "intuitive, and remarkably fast.\n\n"
-                "With a background in both structural engineering and digital "
-                "design, I approach frontend development as a craft. I believe "
-                "that clean code is the foundation of inclusive, accessible, and "
-                "delightful user experiences.",
+                "I'm a developer at IIIT Ranchi who builds across mobile and AI. "
+                "I ship production Flutter & Android apps, and I design "
+                "AI systems — chatbots, RAG/query pipelines, and multi-agent "
+                "architectures that turn messy real-world problems into "
+                "reliable, automated workflows.\n\n"
+                "Over 1+ year and 3 internships I've taken projects from idea to "
+                "the Play Store, won hackathons, and led teams — always focused "
+                "on making things genuinely useful, not just demos.",
                 style: GoogleFonts.inter(
                     color: state.textPrimary.withOpacity(0.85),
                     fontSize: 13,
@@ -102,13 +103,13 @@ class AboutDetail extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: _stat(state, Icons.rocket_launch_outlined, "12+",
-                  "Apps Shipped"),
+              child: _stat(state, Icons.rocket_launch_outlined, "7+",
+                  "Projects Built"),
             ),
             const SizedBox(width: 14),
             Expanded(
-              child:
-                  _stat(state, Icons.groups_outlined, "500k+", "Users Reached"),
+              child: _stat(
+                  state, Icons.emoji_events_outlined, "5+", "Awards Won"),
             ),
           ],
         ),
