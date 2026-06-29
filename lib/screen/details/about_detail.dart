@@ -57,18 +57,6 @@ class AboutDetail extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   fontSize: 12.5)),
         ),
-        const SizedBox(height: 16),
-        // Fact chips.
-        const Wrap(
-          alignment: WrapAlignment.center,
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            SoftChip(label: "IIIT Ranchi", icon: Icons.school_outlined),
-            SoftChip(label: "1+ Yr Experience", icon: Icons.schedule),
-            SoftChip(label: "3 Internships", icon: Icons.work_outline),
-          ],
-        ),
         const SizedBox(height: 20),
         // About card.
         GlassCard(
@@ -82,7 +70,7 @@ class AboutDetail extends StatelessWidget {
                       fontSize: 17)),
               const SizedBox(height: 12),
               Text(
-                "I'm a developer at IIIT Ranchi who builds across mobile and AI. "
+                "I'm a developer from IIIT Ranchi who builds across mobile and AI. "
                 "I ship production Flutter & Android apps, and I design "
                 "AI systems — chatbots, RAG/query pipelines, and multi-agent "
                 "architectures that turn messy real-world problems into "
@@ -109,7 +97,7 @@ class AboutDetail extends StatelessWidget {
             const SizedBox(width: 14),
             Expanded(
               child: _stat(
-                  state, Icons.emoji_events_outlined, "5+", "Awards Won"),
+                  state, Icons.work_outline, "3+", "Internships"),
             ),
           ],
         ),

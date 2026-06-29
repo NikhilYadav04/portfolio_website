@@ -873,6 +873,7 @@ class _AchievementsCard extends StatelessWidget {
     ["brush", "Best UI/UX — Cinecode 2026", "Storyboardiac"],
     ["medal", "SIH Finalist", "Top 0.5% of 2500+ teams"],
     ["merit", "Certificate of Merit — CIIA", "Mumbai · Top 50"],
+    ["verified", "Postman API — Student Expert", "Postman"],
   ];
 
   IconData _iconFor(String key) {
@@ -883,6 +884,8 @@ class _AchievementsCard extends StatelessWidget {
         return Icons.brush;
       case "medal":
         return Icons.workspace_premium;
+      case "verified":
+        return Icons.verified;
       default:
         return Icons.military_tech;
     }
@@ -903,47 +906,43 @@ class _AchievementsCard extends StatelessWidget {
               style: GoogleFonts.inter(
                   color: state.textMuted, fontSize: 12.5)),
           const SizedBox(height: 18),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                for (final a in _items)
-                  Row(
-                    children: [
-                      Container(
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
-                          color: state.accent.withOpacity(0.14),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(_iconFor(a[0]),
-                            size: 19, color: state.inkAccent),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(a[1],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: GoogleFonts.inter(
-                                    color: state.textPrimary,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13)),
-                            Text(a[2],
-                                style: GoogleFonts.inter(
-                                    color: state.textMuted, fontSize: 10.5)),
-                          ],
-                        ),
-                      ),
-                    ],
+          for (final a in _items)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: state.accent.withOpacity(0.14),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child:
+                        Icon(_iconFor(a[0]), size: 19, color: state.inkAccent),
                   ),
-              ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(a[1],
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.inter(
+                                color: state.textPrimary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13)),
+                        Text(a[2],
+                            style: GoogleFonts.inter(
+                                color: state.textMuted, fontSize: 10.5)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
+          const Spacer(),
           _ViewButton(
               label: "VIEW ALL",
               onTap: () => context

@@ -52,15 +52,6 @@ class AchievementsDetail extends StatelessWidget {
           "Earned the Student Expert badge, demonstrating strong proficiency in "
           "API development and testing.",
     ),
-    _Achievement(
-      icon: Icons.description,
-      title: "Letter of Recommendation — SNDT",
-      org: "Faculty-Mentored PillBin Project",
-      desc:
-          "Core contributor who owned end-to-end coordination, testing, "
-          "documentation, and the Google Play Store release; received a formal "
-          "LOR.",
-    ),
   ];
 
   @override
