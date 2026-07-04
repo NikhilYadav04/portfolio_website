@@ -272,6 +272,8 @@ class _ProjectCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(project.desc,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
                           color: ink.withOpacity(0.8),
                           fontSize: 12.5,
@@ -291,11 +293,17 @@ class _ProjectCard extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 11),
+                padding: const EdgeInsets.symmetric(vertical: 13),
                 decoration: BoxDecoration(
-                  color: accent.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: accent.withOpacity(0.35)),
+                  color: Colors.white.withOpacity(0.85),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -306,7 +314,8 @@ class _ProjectCard extends StatelessWidget {
                         style: GoogleFonts.inter(
                             color: state.inkAccent,
                             fontWeight: FontWeight.w700,
-                            fontSize: 13)),
+                            fontSize: 13,
+                            letterSpacing: 0.5)),
                   ],
                 ),
               ),

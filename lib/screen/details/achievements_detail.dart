@@ -18,6 +18,7 @@ class AchievementsDetail extends StatelessWidget {
           "Won 1st place out of 20+ teams at the state-level YPIPA hackathon for "
           "PillBin, a smart medicine-management ecosystem. Also represented the "
           "project at Avishkar & Anveshan (State Level).",
+      tier: 0,
     ),
     _Achievement(
       icon: Icons.brush,
@@ -26,6 +27,7 @@ class AchievementsDetail extends StatelessWidget {
       desc:
           "Awarded Best UI/UX for designing Storyboardiac, a collaborative movie "
           "script editor and storyboarding platform.",
+      tier: 0,
     ),
     _Achievement(
       icon: Icons.workspace_premium,
@@ -35,6 +37,7 @@ class AchievementsDetail extends StatelessWidget {
           "Led a team of 5 to the finals of Smart India Hackathon after "
           "institution-level selection, architecting the backend for a plant "
           "disease detection project.",
+      tier: 1,
     ),
     _Achievement(
       icon: Icons.military_tech,
@@ -43,6 +46,7 @@ class AchievementsDetail extends StatelessWidget {
       desc:
           "Recognized for Research & Innovation Impact for \"PillBin — Drug "
           "Disposal Platform\" at the CIIA India Innovators Exhibition, Mumbai.",
+      tier: 1,
     ),
     _Achievement(
       icon: Icons.verified,
@@ -51,6 +55,7 @@ class AchievementsDetail extends StatelessWidget {
       desc:
           "Earned the Student Expert badge, demonstrating strong proficiency in "
           "API development and testing.",
+      tier: 2,
     ),
   ];
 
@@ -80,11 +85,13 @@ class _Achievement {
   final String title;
   final String org;
   final String desc;
+  final int tier;
   const _Achievement({
     required this.icon,
     required this.title,
     required this.org,
     required this.desc,
+    this.tier = 1,
   });
 }
 
@@ -95,6 +102,9 @@ class _AchievementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
+    final double badgeSize = item.tier == 0 ? 52 : 44;
+    final double iconSize = item.tier == 0 ? 26 : 22;
+    final double bgOpacity = item.tier == 0 ? 0.22 : 0.14;
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: GlassCard(
@@ -102,15 +112,14 @@ class _AchievementCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Icon badge.
             Container(
-              width: 44,
-              height: 44,
+              width: badgeSize,
+              height: badgeSize,
               decoration: BoxDecoration(
-                color: state.accent.withOpacity(0.14),
+                color: state.accent.withOpacity(bgOpacity),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(item.icon, color: state.inkAccent, size: 22),
+              child: Icon(item.icon, color: state.inkAccent, size: iconSize),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -126,11 +135,13 @@ class _AchievementCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(item.org,
                       style: GoogleFonts.inter(
-                          color: state.inkAccent,
+                          color: state.textMuted,
                           fontWeight: FontWeight.w600,
                           fontSize: 12)),
                   const SizedBox(height: 8),
                   Text(item.desc,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.inter(
                           color: state.textPrimary.withOpacity(0.8),
                           fontSize: 12,

@@ -437,8 +437,6 @@ class _ExperienceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const _CardBadge(icon: Icons.work_outline),
-          const SizedBox(height: 18),
           Text("Experience", style: _titleStyle(state.inkAccent)),
           const SizedBox(height: 4),
           Text("${_roles.length} roles · 3 currently active",

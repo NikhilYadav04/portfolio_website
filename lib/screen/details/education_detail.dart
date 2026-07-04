@@ -51,7 +51,7 @@ class EducationDetail extends StatelessWidget {
                 GoogleFonts.inter(color: state.textMuted, fontSize: 13)),
         const SizedBox(height: 18),
         for (int i = 0; i < _entries.length; i++)
-          _TimelineEntry(edu: _entries[i], isLast: i == _entries.length - 1),
+          _TimelineEntry(edu: _entries[i], isLast: i == _entries.length - 1, current: i == 0),
       ],
     );
   }
@@ -77,7 +77,8 @@ class _Edu {
 class _TimelineEntry extends StatelessWidget {
   final _Edu edu;
   final bool isLast;
-  const _TimelineEntry({required this.edu, required this.isLast});
+  final bool current;
+  const _TimelineEntry({required this.edu, required this.isLast, this.current = false});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class _TimelineEntry extends StatelessWidget {
                 height: 11,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: current ? state.accent : Colors.white,
                   border: Border.all(color: state.accent, width: 2),
                 ),
               ),
@@ -169,14 +170,38 @@ class _EduCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      edu.degree,
-                      style: GoogleFonts.inter(
-                        color: state.textPrimary,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 15.5,
-                        height: 1.3,
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            edu.degree,
+                            style: GoogleFonts.inter(
+                              color: state.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 15.5,
+                              height: 1.3,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: state.accent.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: state.accent.withOpacity(0.35)),
+                          ),
+                          child: Text(
+                            edu.gradeValue,
+                            style: GoogleFonts.inter(
+                              color: state.inkAccent,
+                              fontSize: 11.5,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 3),
                     Text(
@@ -192,42 +217,6 @@ class _EduCard extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 12),
-          // Grade stat pill.
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-              decoration: BoxDecoration(
-                color: state.accent.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: state.accent.withOpacity(0.35)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    edu.gradeLabel,
-                    style: GoogleFonts.inter(
-                      color: state.textMuted,
-                      fontSize: 10.5,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    edu.gradeValue,
-                    style: GoogleFonts.inter(
-                      color: state.inkAccent,
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
         ],
       ),

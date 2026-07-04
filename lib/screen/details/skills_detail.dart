@@ -44,8 +44,6 @@ class SkillsDetail extends StatelessWidget {
       "Azure",
       "Vercel",
       "Render",
-    ]),
-    _Group("Design", Icons.brush_outlined, [
       "Figma",
       "Canva",
     ]),
