@@ -1,5 +1,6 @@
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -75,6 +76,8 @@ class ExperienceDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailScaffold(
       title: "Experience",
+      eyebrow: "${_roles.length} roles · 3 active",
+      pulse: true,
       children: [
         const SizedBox(height: 4),
         for (int i = 0; i < _roles.length; i++)
@@ -171,35 +174,11 @@ class _RoleCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: Text(
-                  role.dates.toUpperCase(),
-                  style: GoogleFonts.inter(
-                    color: state.textMuted,
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 1.1,
-                  ),
-                ),
+                child: Text(role.dates.toLowerCase(),
+                    style: monoStyle(state.textMuted, size: 10)),
               ),
-              if (role.current)
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: state.accent.withOpacity(0.14),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: state.accent.withOpacity(0.4)),
-                  ),
-                  child: Text(
-                    "PRESENT",
-                    style: GoogleFonts.inter(
-                      color: state.inkAccent,
-                      fontSize: 9.5,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
+              // Same marker the phone's timeline card uses for a live role.
+              if (role.current) const MonoMarker("now", live: true),
             ],
           ),
           const SizedBox(height: 10),
@@ -217,12 +196,8 @@ class _RoleCard extends StatelessWidget {
                   children: [
                     Text(
                       role.title,
-                      style: GoogleFonts.inter(
-                        color: state.textPrimary,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16.5,
-                        height: 1.25,
-                      ),
+                      style: displayStyle(state.textPrimary, size: 16.5)
+                          .copyWith(height: 1.25),
                     ),
                     const SizedBox(height: 3),
                     Text(

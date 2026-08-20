@@ -1,5 +1,6 @@
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ class ProjectsDetail extends StatelessWidget {
   static const _projects = [
     _Project(
       name: "PillBin",
+      initials: "PB",
       tagline: "Smart, offline-first medicine management",
       desc:
           "An offline-first medicine manager for patients and medical centers: "
@@ -26,6 +28,7 @@ class ProjectsDetail extends StatelessWidget {
     ),
     _Project(
       name: "TrialMatch",
+      initials: "TM",
       tagline: "AI clinical trial matching agent",
       desc:
           "A multi-agent system that matches patients to clinical trials by "
@@ -34,12 +37,12 @@ class ProjectsDetail extends StatelessWidget {
           "profile parsing to ranking and report generation.",
       tech: ["Multi-Agent", "RAG", "ClinicalTrials.gov", "Python"],
       icon: Icons.biotech_outlined,
-      logo: "assets/app/trial.png",
       banner: "assets/proj/trial.png",
       url: "https://github.com/NikhilYadav04/clinical_trial",
     ),
     _Project(
       name: "Storyboardiac",
+      initials: "SB",
       tagline: "AI screenwriting & storyboard generation",
       desc:
           "A collaborative screenwriting tool for filmmakers. Writers co-edit "
@@ -54,6 +57,7 @@ class ProjectsDetail extends StatelessWidget {
     ),
     _Project(
       name: "ChatConnect",
+      initials: "CC",
       tagline: "Real-time messaging with voice & video",
       desc:
           "A full-stack chat app: instant Socket.IO messaging with Sent → "
@@ -67,6 +71,7 @@ class ProjectsDetail extends StatelessWidget {
     ),
     _Project(
       name: "Code DNA",
+      initials: "CD",
       tagline: "Your GitHub profile as a living organism",
       desc:
           "A Flutter app that turns any GitHub developer's history into an "
@@ -80,6 +85,7 @@ class ProjectsDetail extends StatelessWidget {
     ),
     _Project(
       name: "SplitEase",
+      initials: "SE",
       tagline: "Real-time group expense splitting",
       desc:
           "A full-stack app for splitting shared expenses with real-time sync. "
@@ -93,6 +99,7 @@ class ProjectsDetail extends StatelessWidget {
     ),
     _Project(
       name: "Attend Ease",
+      initials: "AE",
       tagline: "Attendance & leave management for companies",
       desc:
           "A full-stack workforce attendance app. HR admins define a company "
@@ -101,7 +108,6 @@ class ProjectsDetail extends StatelessWidget {
           "real-time video calls. Feature-first clean architecture.",
       tech: ["Flutter", "Node.js", "MongoDB", "GoRouter"],
       icon: Icons.fingerprint,
-      logo: "assets/app/attend.png",
       banner: "assets/proj/attend.png",
       url: "https://github.com/NikhilYadav04/attend_ease",
     ),
@@ -109,19 +115,10 @@ class ProjectsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CurrentState>();
     return DetailScaffold(
       title: "Projects",
+      eyebrow: "${_projects.length} builds · curated",
       children: [
-        Text("Projects",
-            style: GoogleFonts.inter(
-                color: state.textPrimary,
-                fontWeight: FontWeight.w800,
-                fontSize: 26)),
-        const SizedBox(height: 4),
-        Text("A curated selection of recent work.",
-            style: GoogleFonts.inter(color: state.textMuted, fontSize: 13)),
-        const SizedBox(height: 18),
         for (final p in _projects) _ProjectCard(project: p),
       ],
     );
@@ -135,8 +132,11 @@ class _Project {
   final List<String> tech;
   final IconData icon;
 
-  /// Optional app logo; falls back to [icon] when null.
+  /// Optional app logo; falls back to the [initials] monogram when null.
   final String? logo;
+
+  /// Two-letter mark, matching the monogram column on the phone's Projects card.
+  final String initials;
 
   /// Optional 16:9 horizontal banner image; falls back to an accent gradient
   /// placeholder when null.
@@ -148,6 +148,7 @@ class _Project {
     required this.desc,
     required this.tech,
     required this.icon,
+    required this.initials,
     this.logo,
     this.banner,
     required this.url,
@@ -228,12 +229,10 @@ class _ProjectCard extends StatelessWidget {
                                     fit: BoxFit.cover,
                                     filterQuality: FilterQuality.medium,
                                     cacheWidth: 126,
-                                    errorBuilder: (_, __, ___) => Icon(
-                                        project.icon,
-                                        color: accent,
-                                        size: 24),
+                                    errorBuilder: (_, __, ___) =>
+                                        _monogram(context, project.initials),
                                   )
-                                : Icon(project.icon, color: accent, size: 24),
+                                : _monogram(context, project.initials),
                           ),
                           const SizedBox(width: 11),
                           Expanded(
@@ -345,4 +344,15 @@ class _ProjectCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Two-letter mark shown when a project has no logo asset. Uses the same
+/// initials as the phone's Projects card so a project reads identically on
+/// both screens.
+Widget _monogram(BuildContext context, String initials) {
+  final state = context.watch<CurrentState>();
+  return Center(
+    child: Text(initials,
+        style: monoStyle(state.inkAccent, size: 13, weight: FontWeight.w600)),
+  );
 }

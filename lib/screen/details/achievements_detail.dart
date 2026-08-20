@@ -1,5 +1,6 @@
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ class AchievementsDetail extends StatelessWidget {
 
   static const _items = [
     _Achievement(
+      category: "1st prize",
       icon: Icons.emoji_events,
       title: "1st Prize — YPIPA State Hackathon",
       org: "Young Pharmacist Innovation & Patent Award",
@@ -21,7 +23,8 @@ class AchievementsDetail extends StatelessWidget {
       tier: 0,
     ),
     _Achievement(
-      icon: Icons.brush,
+      category: "ui/ux",
+      icon: Icons.brush_outlined,
       title: "Best UI/UX Award — Cinecode 2026",
       org: "Hackathon by Storyvord",
       desc:
@@ -30,7 +33,8 @@ class AchievementsDetail extends StatelessWidget {
       tier: 0,
     ),
     _Achievement(
-      icon: Icons.workspace_premium,
+      category: "finalist",
+      icon: Icons.workspace_premium_outlined,
       title: "Smart India Hackathon Finalist",
       org: "Top 0.5% of 2500+ teams",
       desc:
@@ -40,7 +44,8 @@ class AchievementsDetail extends StatelessWidget {
       tier: 1,
     ),
     _Achievement(
-      icon: Icons.military_tech,
+      category: "merit",
+      icon: Icons.military_tech_outlined,
       title: "Certificate of Merit — CIIA Innovators Exhibition",
       org: "Mumbai · Top 50 Team",
       desc:
@@ -49,7 +54,8 @@ class AchievementsDetail extends StatelessWidget {
       tier: 1,
     ),
     _Achievement(
-      icon: Icons.verified,
+      category: "cert",
+      icon: Icons.verified_outlined,
       title: "Postman API Fundamentals — Student Expert",
       org: "Postman",
       desc:
@@ -61,19 +67,10 @@ class AchievementsDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CurrentState>();
     return DetailScaffold(
       title: "Achievements",
+      eyebrow: "${_items.length} awards · 2 first place",
       children: [
-        Text("Achievements",
-            style: GoogleFonts.inter(
-                color: state.textPrimary,
-                fontWeight: FontWeight.w800,
-                fontSize: 26)),
-        const SizedBox(height: 4),
-        Text("Awards, recognitions & certifications.",
-            style: GoogleFonts.inter(color: state.textMuted, fontSize: 13)),
-        const SizedBox(height: 18),
         for (final a in _items) _AchievementCard(item: a),
       ],
     );
@@ -81,12 +78,17 @@ class AchievementsDetail extends StatelessWidget {
 }
 
 class _Achievement {
+  /// Lowercase kind of award, shown as the row's mono overline.
+  final String category;
+
+  /// Mark for the row's left column.
   final IconData icon;
   final String title;
   final String org;
   final String desc;
   final int tier;
   const _Achievement({
+    required this.category,
     required this.icon,
     required this.title,
     required this.org,
@@ -102,9 +104,6 @@ class _AchievementCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
-    final double badgeSize = item.tier == 0 ? 52 : 44;
-    final double iconSize = item.tier == 0 ? 26 : 22;
-    final double bgOpacity = item.tier == 0 ? 0.22 : 0.14;
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: GlassCard(
@@ -113,25 +112,29 @@ class _AchievementCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: badgeSize,
-              height: badgeSize,
+              width: 44,
+              height: 44,
               decoration: BoxDecoration(
-                color: state.accent.withOpacity(bgOpacity),
-                borderRadius: BorderRadius.circular(12),
+                color: item.tier == 0
+                    ? state.accent.withOpacity(0.22)
+                    : state.chipFill,
+                borderRadius: BorderRadius.circular(13),
               ),
-              child: Icon(item.icon, color: state.inkAccent, size: iconSize),
+              child: Icon(item.icon,
+                  size: item.tier == 0 ? 23 : 20, color: state.inkAccent),
             ),
             const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(item.category,
+                      style: monoStyle(state.inkAccent.withOpacity(0.6))),
+                  const SizedBox(height: 4),
                   Text(item.title,
-                      style: GoogleFonts.inter(
-                          color: state.textPrimary,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 14.5,
-                          height: 1.3)),
+                      style: displayStyle(state.textPrimary,
+                              size: item.tier == 0 ? 15.5 : 14.5)
+                          .copyWith(height: 1.3)),
                   const SizedBox(height: 2),
                   Text(item.org,
                       style: GoogleFonts.inter(

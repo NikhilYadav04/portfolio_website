@@ -1,8 +1,5 @@
-import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 
 /// Skills detail — grouped category cards, each with a wrap of skill chips.
 /// Matches skills.png; light + mood-adaptive.
@@ -51,14 +48,15 @@ class SkillsDetail extends StatelessWidget {
 
   // Competitive programming highlight, shown as a separate stat row.
   static const _cpStats = [
-    _CpStat("CodeChef", "3 Star (1616)"),
-    _CpStat("LeetCode", "Knight (1868)"),
+    _CpStat("1616", "codechef · 3 star"),
+    _CpStat("1868", "leetcode · knight"),
   ];
 
   @override
   Widget build(BuildContext context) {
     return DetailScaffold(
       title: "Skills",
+      eyebrow: "full stack index",
       children: [
         const SizedBox(height: 4),
         for (final g in _groups) _GroupCard(group: g),
@@ -69,9 +67,12 @@ class SkillsDetail extends StatelessWidget {
 }
 
 class _CpStat {
-  final String platform;
-  final String rank;
-  const _CpStat(this.platform, this.rank);
+  /// The rating itself — the number that carries the information.
+  final String value;
+
+  /// Lowercase caption: platform and title.
+  final String label;
+  const _CpStat(this.value, this.label);
 }
 
 class _Group {
@@ -87,34 +88,14 @@ class _GroupCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CurrentState>();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: GlassCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: state.accent.withOpacity(0.14),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:
-                      Icon(group.icon, size: 18, color: state.inkAccent),
-                ),
-                const SizedBox(width: 10),
-                Text(group.title,
-                    style: GoogleFonts.inter(
-                        color: state.textPrimary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15)),
-              ],
-            ),
-            const SizedBox(height: 14),
+            SectionLabel(group.title.toLowerCase()),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -134,66 +115,24 @@ class _CpCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CurrentState>();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: GlassCard(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SectionLabel("competitive programming"),
+            const SizedBox(height: 12),
             Row(
               children: [
-                Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: state.accent.withOpacity(0.14),
-                    borderRadius: BorderRadius.circular(10),
+                for (int i = 0; i < stats.length; i++) ...[
+                  if (i > 0) const SizedBox(width: 10),
+                  Expanded(
+                    child: Readout(
+                        value: stats[i].value, label: stats[i].label),
                   ),
-                  child: Icon(Icons.emoji_events_outlined,
-                      size: 18, color: state.inkAccent),
-                ),
-                const SizedBox(width: 10),
-                Text("Competitive Programming",
-                    style: GoogleFonts.inter(
-                        color: state.textPrimary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15)),
+                ],
               ],
-            ),
-            const SizedBox(height: 14),
-            Row(
-              children: stats.map((s) {
-                return Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 12),
-                    decoration: BoxDecoration(
-                      color: state.accent.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(14),
-                      border:
-                          Border.all(color: state.accent.withOpacity(0.3)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(s.platform,
-                            style: GoogleFonts.inter(
-                                color: state.textMuted,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 3),
-                        Text(s.rank,
-                            style: GoogleFonts.inter(
-                                color: state.inkAccent,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 14)),
-                      ],
-                    ),
-                  ),
-                );
-              }).toList(),
             ),
           ],
         ),

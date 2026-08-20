@@ -1,5 +1,6 @@
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class EducationDetail extends StatelessWidget {
       degree: "B.Tech, Electronics and Communication Engineering",
       institution: "Indian Institute of Information Technology Ranchi",
       gradeLabel: "CGPA",
-      gradeValue: "8.96",
+      gradeValue: "9.07",
       logo: "assets/edu/iiit.jpg",
     ),
     _Edu(
@@ -36,20 +37,10 @@ class EducationDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CurrentState>();
     return DetailScaffold(
       title: "Education",
+      eyebrow: "iiit ranchi · 9.07 cgpa",
       children: [
-        Text("Education",
-            style: GoogleFonts.inter(
-                color: state.textPrimary,
-                fontWeight: FontWeight.w800,
-                fontSize: 26)),
-        const SizedBox(height: 4),
-        Text("Academic background and learning journey.",
-            style:
-                GoogleFonts.inter(color: state.textMuted, fontSize: 13)),
-        const SizedBox(height: 18),
         for (int i = 0; i < _entries.length; i++)
           _TimelineEntry(edu: _entries[i], isLast: i == _entries.length - 1, current: i == 0),
       ],
@@ -132,15 +123,8 @@ class _EduCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            edu.dates.toUpperCase(),
-            style: GoogleFonts.inter(
-              color: state.textMuted,
-              fontSize: 10.5,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.1,
-            ),
-          ),
+          Text(edu.dates.toLowerCase(),
+              style: monoStyle(state.textMuted, size: 10)),
           const SizedBox(height: 10),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,31 +160,12 @@ class _EduCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             edu.degree,
-                            style: GoogleFonts.inter(
-                              color: state.textPrimary,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 15.5,
-                              height: 1.3,
-                            ),
+                            style: displayStyle(state.textPrimary, size: 15.5)
+                                .copyWith(height: 1.3),
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: state.accent.withOpacity(0.12),
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: state.accent.withOpacity(0.35)),
-                          ),
-                          child: Text(
-                            edu.gradeValue,
-                            style: GoogleFonts.inter(
-                              color: state.inkAccent,
-                              fontSize: 11.5,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
+                        MonoMarker(edu.gradeValue, boxed: true),
                       ],
                     ),
                     const SizedBox(height: 3),

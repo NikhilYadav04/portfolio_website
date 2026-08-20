@@ -186,4 +186,15 @@ extension MoodSurfaces on MoodSpec {
 
   /// Secondary/meta text — muted slate for dates, locations, captions.
   Color get textMuted => _mix(const Color(0xFF64748B), accent, 0.08);
+
+  /// Hairline rule that separates a card's masthead and footer from its body.
+  /// Faint enough to structure without drawing the eye.
+  Color get hairline => accent.withOpacity(0.15);
+
+  /// Vertical connector on the experience / education timeline rails.
+  Color get railLine => accent.withOpacity(0.24);
+
+  /// Fill behind monogram tiles, skill chips and readout tiles — one tint for
+  /// every small content container so the columns read as a single system.
+  Color get chipFill => accent.withOpacity(0.13);
 }

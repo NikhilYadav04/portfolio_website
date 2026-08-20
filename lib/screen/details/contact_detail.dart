@@ -1,5 +1,6 @@
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,8 @@ class ContactDetail extends StatelessWidget {
 
     return DetailScaffold(
       title: "Contact",
+      eyebrow: "open to work · replies within a day",
+      pulse: true,
       children: [
         const SizedBox(height: 10),
         Center(
@@ -40,10 +43,7 @@ class ContactDetail extends StatelessWidget {
         const SizedBox(height: 16),
         Center(
           child: Text("Let's connect!",
-              style: GoogleFonts.inter(
-                  color: state.textPrimary,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 24)),
+              style: displayStyle(state.inkAccent, size: 24)),
         ),
         const SizedBox(height: 8),
         Center(
