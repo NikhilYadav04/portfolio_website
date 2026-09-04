@@ -31,7 +31,10 @@ jobs:
         run: flutter pub get
 
       - name: Build web
-        run: flutter build web --release --base-href "/portfolio_website/"
+        # Custom domain (nikhil.runs-on.dev) serves from the root, so the
+        # base href is "/". It would be "/portfolio_website/" only if the
+        # site were served from the github.io project-page path.
+        run: flutter build web --release --base-href "/"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
