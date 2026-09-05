@@ -1,11 +1,11 @@
 {
-    "name": "awesome_portfolio",
-    "short_name": "awesome_portfolio",
+    "name": "Nikhil Yadav — Portfolio",
+    "short_name": "Nikhil Yadav",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": ""A new Flutter project."",
+    "background_color": "#BDDAFA",
+    "theme_color": "#4DA3FF",
+    "description": "Portfolio of Nikhil Yadav — building AI agents and production Flutter apps.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
