@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:convert';
 
 import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import 'social_row.dart';
 
 /// Phase 4 — the left glass panel's content.
 ///
@@ -23,24 +24,36 @@ class LiveStatusCard extends StatefulWidget {
 
 class _LiveStatusCardState extends State<LiveStatusCard> {
   late final Timer _clock;
-  DateTime _now = DateTime.now();
+  DateTime _now = _ist();
 
-  // Placeholder contribution data — a deterministic 7x10 grid of 0..3 levels.
-  late final List<int> _grid = List.generate(70, (i) {
-    final r = Random(i * 7 + 3);
-    final v = r.nextInt(10);
-    if (v > 7) return 3;
-    if (v > 5) return 2;
-    if (v > 2) return 1;
-    return 0;
-  });
+  /// Real contribution data from `assets/data/contributions.json`, which CI
+  /// refreshes on every deploy. Null until it loads, or if the file is missing
+  /// or malformed — in which case the grid is hidden rather than faked.
+  _Contributions? _contrib;
+
+  /// Nikhil's wall-clock time. `DateTime.now()` alone is the *viewer's* local
+  /// time, which the "IST" label would then misstate for anyone outside India.
+  static DateTime _ist() =>
+      DateTime.now().toUtc().add(const Duration(hours: 5, minutes: 30));
 
   @override
   void initState() {
     super.initState();
     _clock = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (mounted) setState(() => _now = DateTime.now());
+      if (mounted) setState(() => _now = _ist());
     });
+    _loadContributions();
+  }
+
+  Future<void> _loadContributions() async {
+    try {
+      final raw =
+          await rootBundle.loadString('assets/data/contributions.json');
+      final c = _Contributions.parse(raw);
+      if (mounted && c != null) setState(() => _contrib = c);
+    } catch (_) {
+      // Missing or malformed: leave the grid hidden.
+    }
   }
 
   @override
@@ -113,65 +126,75 @@ class _LiveStatusCardState extends State<LiveStatusCard> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          // Contribution sparkline.
-          Text(
-            "contributions",
-            style: GoogleFonts.firaCode(
-              color: Colors.white.withOpacity(0.45),
-              fontSize: 9,
-              letterSpacing: 1,
+          // Contribution graph — real data only; absent rather than invented.
+          if (_contrib != null) ...[
+            const SizedBox(height: 16),
+            Text(
+              "${_contrib!.total} contributions · last year",
+              style: GoogleFonts.firaCode(
+                color: Colors.white.withOpacity(0.55),
+                fontSize: 9,
+                letterSpacing: 0.5,
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          _ContributionGrid(grid: _grid, accent: accent),
+            const SizedBox(height: 6),
+            _ContributionGrid(grid: _contrib!.levels, accent: accent),
+          ],
           const SizedBox(height: 20),
           // Social links — sit just below the contribution grid.
-          const _SocialRow(),
+          SocialRow(
+            iconColor: Colors.white,
+            fill: Colors.white.withOpacity(0.10),
+            border: Colors.white.withOpacity(0.18),
+            size: 34,
+            gap: 10,
+            alignment: MainAxisAlignment.start,
+          ),
         ],
       ),
     );
   }
 }
 
-/// Row of social link icons shown under the contributions in the left panel.
-class _SocialRow extends StatelessWidget {
-  const _SocialRow();
+/// The last [weeks] weeks of GitHub contributions, laid out like GitHub's own
+/// graph: one column per week starting Sunday, newest week on the right.
+class _Contributions {
+  static const int weeks = 10;
 
-  @override
-  Widget build(BuildContext context) {
-    final CurrentState state =
-        Provider.of<CurrentState>(context, listen: false);
-    final socials = <List<dynamic>>[
-      ["assets/icons/github.svg", null, github],
-      ["assets/icons/linkedin.svg", null, linkedIn],
-      [null, FontAwesomeIcons.instagram, instagram],
-      ["assets/icons/twitter.svg", null, twitter],
+  /// Column-major, `weeks * 7` long. 0–4 is GitHub's level; -1 marks a day in
+  /// the current week that hasn't happened yet.
+  final List<int> levels;
+  final int total;
+  const _Contributions(this.levels, this.total);
+
+  static _Contributions? parse(String raw) {
+    final json = jsonDecode(raw) as Map<String, dynamic>;
+    final entries =
+        (json['contributions'] as List).cast<Map<String, dynamic>>();
+    if (entries.isEmpty) return null;
+
+    final byDate = {
+      for (final e in entries) e['date'] as String: (e['level'] as num).toInt()
+    };
+    // UTC throughout: stepping local dates by 24h slips a day across a
+    // viewer's DST change, which would shift the whole graph.
+    DateTime day(String iso) => DateTime.parse('${iso}T00:00:00Z');
+    String iso(DateTime d) =>
+        '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+    final last = day(entries.last['date'] as String);
+    final weekStart = last.subtract(Duration(days: last.weekday % 7));
+    final start = weekStart.subtract(const Duration(days: 7 * (weeks - 1)));
+
+    final levels = <int>[
+      for (int i = 0; i < weeks * 7; i++)
+        () {
+          final d = start.add(Duration(days: i));
+          return d.isAfter(last) ? -1 : (byDate[iso(d)] ?? 0);
+        }(),
     ];
-    return Row(
-      children: socials.map((s) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: GestureDetector(
-            onTap: () => state.launchInBrowser(s[2] as String),
-            child: Container(
-              width: 38,
-              height: 38,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.10),
-                border: Border.all(color: Colors.white.withOpacity(0.18)),
-              ),
-              child: Center(
-                child: s[0] != null
-                    ? SvgPicture.asset(s[0] as String, width: 18, height: 18)
-                    : Icon(s[1] as IconData, color: Colors.white, size: 18),
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
+    final total = ((json['total'] as Map?)?['lastYear'] as num?)?.toInt() ?? 0;
+    return _Contributions(levels, total);
   }
 }
 
@@ -183,7 +206,7 @@ class _ContributionGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const int rows = 7;
-    const int cols = 10;
+    const int cols = _Contributions.weeks;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: List.generate(rows, (r) {
@@ -191,16 +214,19 @@ class _ContributionGrid extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 3),
           child: Row(
             children: List.generate(cols, (c) {
-              final level = grid[(c * rows + r) % grid.length];
+              final level = grid[c * rows + r];
               return Container(
                 margin: const EdgeInsets.only(right: 3),
                 width: 9,
                 height: 9,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
-                  color: level == 0
-                      ? Colors.white.withOpacity(0.08)
-                      : accent.withOpacity(0.25 + level * 0.25),
+                  // -1: a day this week that hasn't happened — not drawn.
+                  color: level < 0
+                      ? Colors.transparent
+                      : level == 0
+                          ? Colors.white.withOpacity(0.08)
+                          : accent.withOpacity(0.2 + level * 0.2),
                 ),
               );
             }),

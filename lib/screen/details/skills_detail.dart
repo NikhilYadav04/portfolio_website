@@ -1,3 +1,4 @@
+import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,7 @@ class SkillsDetail extends StatelessWidget {
   // Competitive programming highlight, shown as a separate stat row.
   static const _cpStats = [
     _CpStat("1616", "codechef · 3 star"),
-    _CpStat("1868", "leetcode · knight"),
+    _CpStat("1868", "leetcode · knight", url: leetCode),
   ];
 
   @override
@@ -72,7 +73,9 @@ class _CpStat {
 
   /// Lowercase caption: platform and title.
   final String label;
-  const _CpStat(this.value, this.label);
+  /// Profile backing the rating, when there is one to link to.
+  final String? url;
+  const _CpStat(this.value, this.label, {this.url});
 }
 
 class _Group {
@@ -129,7 +132,9 @@ class _CpCard extends StatelessWidget {
                   if (i > 0) const SizedBox(width: 10),
                   Expanded(
                     child: Readout(
-                        value: stats[i].value, label: stats[i].label),
+                        value: stats[i].value,
+                        label: stats[i].label,
+                        url: stats[i].url),
                   ),
                 ],
               ],

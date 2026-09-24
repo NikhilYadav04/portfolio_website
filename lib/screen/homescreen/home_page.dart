@@ -137,7 +137,7 @@ class HomePage extends StatelessWidget {
                               alignment: Alignment.topCenter,
                               child: FrostedWidget(
                                 onPressed: () {
-                                  currentState.launchInBrowser(topMate);
+                                  currentState.launchInBrowser("mailto:$email");
                                 },
                                 childW: Center(
                                   child: Container(
@@ -146,12 +146,10 @@ class HomePage extends StatelessWidget {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Image.asset(
-                                          "assets/icons/topMate.png",
-                                          width: 50 *
-                                              theme.widthRatio *
-                                              theme.heightRatio,
-                                          height: 50 *
+                                        Icon(
+                                          Icons.mail_outline,
+                                          color: Colors.white,
+                                          size: 44 *
                                               theme.widthRatio *
                                               theme.heightRatio,
                                         ),

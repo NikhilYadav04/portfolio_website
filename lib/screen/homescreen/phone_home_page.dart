@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../consts/data.dart';
 import '../../providers/current_state.dart';
+import '../../widgets/social_row.dart';
 import '../../widgets/type_scale.dart';
 import '../details/about_detail.dart';
 import '../details/achievements_detail.dart';
@@ -626,16 +626,11 @@ class _RailRow extends StatelessWidget {
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard();
 
+  // [value, label, link] — the rating links to the profile that backs it.
   static const _stats = [
-    ["7", "projects"],
-    ["5", "roles"],
-    ["1868", "leetcode"],
-  ];
-
-  static const _socials = [
-    ["assets/icons/github.svg", github],
-    ["assets/icons/linkedin.svg", linkedIn],
-    ["assets/icons/twitter.svg", twitter],
+    ["7", "projects", ""],
+    ["5", "roles", ""],
+    ["1868", "leetcode", leetCode],
   ];
 
   @override
@@ -706,20 +701,17 @@ class _ProfileCard extends StatelessWidget {
                             color: state.hairline,
                             margin: const EdgeInsets.symmetric(horizontal: 14),
                           ),
-                        _stat(state, _stats[i][0], _stats[i][1]),
+                        _stat(context, state, _stats[i][0], _stats[i][1],
+                            _stats[i][2]),
                       ],
                     ],
                   ),
                   const SizedBox(height: 22),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (final s in _socials)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: _social(context, state, s[0], s[1]),
-                        ),
-                    ],
+                  SocialRow(
+                    iconColor: state.inkAccent,
+                    fill: state.chipFill,
+                    size: 32,
+                    gap: 8,
                   ),
                 ],
               ),
@@ -739,8 +731,9 @@ class _ProfileCard extends StatelessWidget {
     );
   }
 
-  Widget _stat(CurrentState state, String value, String label) {
-    return Column(
+  Widget _stat(BuildContext context, CurrentState state, String value,
+      String label, String link) {
+    final Widget body = Column(
       children: [
         Text(value,
             style: monoStyle(state.inkAccent, size: 15, weight: FontWeight.w600)),
@@ -748,31 +741,16 @@ class _ProfileCard extends StatelessWidget {
         Text(label, style: monoStyle(state.textMuted, size: 8.5)),
       ],
     );
-  }
-
-  Widget _social(
-      BuildContext context, CurrentState state, String asset, String link) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => context.read<CurrentState>().launchInBrowser(link),
-        behavior: HitTestBehavior.opaque,
-        child: Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: state.chipFill,
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              asset,
-              width: 14,
-              height: 14,
-              colorFilter:
-                  ColorFilter.mode(state.inkAccent, BlendMode.srcIn),
-            ),
-          ),
+    if (link.isEmpty) return body;
+    return Semantics(
+      link: true,
+      label: "$label profile",
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => context.read<CurrentState>().launchInBrowser(link),
+          child: body,
         ),
       ),
     );
@@ -938,9 +916,12 @@ class _SkillsCard extends StatelessWidget {
           // number is the point, the platform is the caption.
           Row(
             children: [
-              Expanded(child: _readout(state, "1868", "leetcode · knight")),
+              Expanded(
+                  child: _readout(context, state, "1868", "leetcode · knight",
+                      link: leetCode)),
               const SizedBox(width: 10),
-              Expanded(child: _readout(state, "1616", "codechef · 3★")),
+              Expanded(
+                  child: _readout(context, state, "1616", "codechef · 3★")),
             ],
           ),
         ],
@@ -948,8 +929,10 @@ class _SkillsCard extends StatelessWidget {
     );
   }
 
-  Widget _readout(CurrentState state, String value, String label) {
-    return Container(
+  Widget _readout(
+      BuildContext context, CurrentState state, String value, String label,
+      {String? link}) {
+    final Widget tile = Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.5),
@@ -964,6 +947,19 @@ class _SkillsCard extends StatelessWidget {
           const SizedBox(height: 3),
           Text(label, style: monoStyle(state.textMuted, size: 8.5)),
         ],
+      ),
+    );
+    if (link == null) return tile;
+    return Semantics(
+      link: true,
+      label: "$label profile",
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => context.read<CurrentState>().launchInBrowser(link),
+          child: tile,
+        ),
       ),
     );
   }

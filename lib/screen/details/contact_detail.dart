@@ -1,3 +1,4 @@
+import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
 import 'package:awesome_portfolio/widgets/type_scale.dart';
@@ -9,12 +10,6 @@ import 'package:provider/provider.dart';
 /// 2x2 grid of social tiles. Matches contact.png; light + mood-adaptive.
 class ContactDetail extends StatelessWidget {
   const ContactDetail({super.key});
-
-  static const _linkedIn =
-      "https://www.linkedin.com/in/nikhil-yadav-1a14062a2";
-  static const _github = "https://github.com/NikhilYadav04";
-  static const _instagram = "https://www.instagram.com/yadav_17_05/";
-  static const _email = "byadav1723@gmail.com";
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +56,7 @@ class ContactDetail extends StatelessWidget {
         const SizedBox(height: 22),
         // Email me — primary action.
         GestureDetector(
-          onTap: () => state.launchInBrowser("mailto:$_email"),
+          onTap: () => state.launchInBrowser("mailto:$email"),
           behavior: HitTestBehavior.opaque,
           child: Container(
             width: double.infinity,
@@ -93,11 +88,11 @@ class ContactDetail extends StatelessWidget {
           children: [
             Expanded(
                 child: _social(context, ink, Icons.mail_outline, "Email",
-                    "mailto:$_email")),
+                    "mailto:$email")),
             const SizedBox(width: 14),
             Expanded(
                 child:
-                    _social(context, ink, Icons.code, "GitHub", _github)),
+                    _social(context, ink, Icons.code, "GitHub", github)),
           ],
         ),
         const SizedBox(height: 14),
@@ -105,11 +100,11 @@ class ContactDetail extends StatelessWidget {
           children: [
             Expanded(
                 child: _social(
-                    context, ink, Icons.work_outline, "LinkedIn", _linkedIn)),
+                    context, ink, Icons.work_outline, "LinkedIn", linkedIn)),
             const SizedBox(width: 14),
             Expanded(
                 child: _social(context, ink, Icons.camera_alt_outlined,
-                    "Instagram", _instagram)),
+                    "Instagram", instagram)),
           ],
         ),
       ],

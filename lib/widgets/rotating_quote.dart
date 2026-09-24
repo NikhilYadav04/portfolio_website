@@ -38,8 +38,23 @@ class _RotatingQuoteState extends State<RotatingQuote> {
     final quote = rotatingQuotes[_i];
     return Padding(
       padding: const EdgeInsets.all(16),
+      // Sequential, not a crossfade: the outgoing quote fades away in the first
+      // half and the incoming one fades up in the second. Both curves use
+      // Interval(0.5, 1) because the outgoing child runs its animation in
+      // reverse. A simultaneous crossfade stacked two quotes on top of each
+      // other mid-transition and read as garbled text.
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 700),
+        switchInCurve: const Interval(0.5, 1, curve: Curves.easeOut),
+        switchOutCurve: const Interval(0.5, 1, curve: Curves.easeIn),
+        transitionBuilder: (child, animation) => FadeTransition(
+          opacity: animation,
+          child: SlideTransition(
+            position: Tween(begin: const Offset(0, 0.06), end: Offset.zero)
+                .animate(animation),
+            child: child,
+          ),
+        ),
         child: Column(
           key: ValueKey(_i),
           crossAxisAlignment: CrossAxisAlignment.start,

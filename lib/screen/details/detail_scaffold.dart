@@ -221,11 +221,16 @@ class Readout extends StatelessWidget {
   /// their own container.
   final bool boxed;
 
+  /// When set, the readout opens this URL — a rating links to the profile that
+  /// backs it.
+  final String? url;
+
   const Readout({
     super.key,
     required this.value,
     required this.label,
     this.boxed = true,
+    this.url,
   });
 
   @override
@@ -242,15 +247,29 @@ class Readout extends StatelessWidget {
         Text(label, style: monoStyle(state.textMuted, size: 9)),
       ],
     );
-    if (!boxed) return content;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.55),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: state.hairline),
+    final Widget tile = !boxed
+        ? content
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.55),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: state.hairline),
+            ),
+            child: content,
+          );
+    if (url == null) return tile;
+    return Semantics(
+      link: true,
+      label: "$label profile",
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => context.read<CurrentState>().launchInBrowser(url!),
+          child: tile,
+        ),
       ),
-      child: content,
     );
   }
 }

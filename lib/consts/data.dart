@@ -1,18 +1,10 @@
-import 'package:awesome_portfolio/models/app_model.dart';
 import 'package:awesome_portfolio/models/color_model.dart';
 import 'package:awesome_portfolio/models/device_model.dart';
-import 'package:awesome_portfolio/screen/miniProjects/education/education.dart';
-import 'package:awesome_portfolio/screen/miniProjects/experience/experience.dart';
 import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/experience_model.dart';
 import '../models/skill_model.dart';
-import '../screen/miniProjects/about/about.dart';
-import '../screen/miniProjects/playground/agent_playground.dart';
-import '../screen/miniProjects/projects/projects.dart';
-import '../screen/miniProjects/skills/skills.dart';
 
 const double baseHeight = 790;
 const double baseWidth = 1440;
@@ -126,76 +118,6 @@ String appSubtitle(String title) {
   }
 }
 
-List<AppModel> apps = [
-  AppModel(
-      title: "Playground",
-      color: Colors.white,
-      icon: Icons.smart_toy_outlined,
-      screen: const AgentPlayground()),
-  AppModel(
-      title: "About",
-      color: Colors.white,
-      icon: Icons.person,
-      screen: const AboutMe()),
-  AppModel(
-      title: "Skills",
-      color: Colors.white,
-      icon: Icons.insights,
-      screen: const Skills()),
-  AppModel(
-      title: "Projects",
-      color: Colors.white,
-      icon: Icons.apps_rounded,
-      screen: const Projects()),
-  AppModel(
-    title: "Youtube",
-    assetPath: "assets/icons/youtube.svg",
-    color: Colors.white,
-    link: youtubeChannel,
-  ),
-  AppModel(
-    title: "LinkedIn",
-    assetPath: "assets/icons/linkedin.svg",
-    color: Colors.white,
-    link: linkedIn,
-  ),
-  AppModel(
-    title: "Twitter/X",
-    assetPath: "assets/icons/twitter.svg",
-    color: Colors.white,
-    link: twitter,
-  ),
-  AppModel(
-    title: "Topmate",
-    assetPath: "assets/icons/topMate.png",
-    color: Colors.white,
-    link: topMate,
-  ),
-  AppModel(
-      title: "Experience",
-      color: Colors.white,
-      icon: FontAwesomeIcons.idBadge,
-      screen: const Experience()),
-  AppModel(
-    title: "Education",
-    color: Colors.white,
-    icon: Icons.school_outlined,
-    screen: const Education(),
-  ),
-  AppModel(
-    title: "Github",
-    assetPath: "assets/icons/github.svg",
-    color: Colors.white,
-    link: github,
-  ),
-  AppModel(
-    title: "Play Store",
-    assetPath: "assets/icons/playstore.svg",
-    color: Colors.white,
-    link: playApps,
-  ),
-];
-
 final List<JobExperience> education = [
   JobExperience(
     color: Colors.red,
@@ -300,7 +222,7 @@ final List<JobExperience> jobExperiences = [
 
 const String developerName = "Nikhil Yadav";
 const String developerTagline = "Building AI Agents & Mobile Apps";
-const String statusLine = "● currently building AI agents";
+const String statusLine = "currently building AI agents";
 const String localTimezoneLabel = "IST";
 
 /// Rotating quotes shown in the right panel under the mood picker.
@@ -363,19 +285,35 @@ const List<ProjectApp> projectApps = [
   ),
 ];
 
-const String youtubeChannel = "https://www.youtube.com/@highcoder";
-const String linkedIn = "https://www.linkedin.com/in/high-coder/";
-const String github = "https://github.com/high-coder";
-const String twitter = "https://twitter.com/highcoder__";
-const String instagram = "https://www.instagram.com/";
-const String topMate = "https://topmate.io/highcoder";
-const String resumeLink =
-    "https://drive.google.com/file/d/1LO3Km6fFkJVW92MNXRLSYl--E9YlTHJd/view";
-const String email = "deepakmittal941@gmail.com";
-String introduction =
-    "Welcome to my portfolio website, this website is highly inspired(almost copied) from Pawan Kumar.\n\nI am a Developer with 3 years of experience in flutter. Worked in many startups most recently worked with Stimuler an application that helps prepare students for Ielts and other english exams.\n\nWhen i am not developing I am mainly watching some movies or series or making stuff on Youtube or just watching fireship";
-const String playApps =
-    "https://play.google.com/store/apps/developer?id=AppyMonk";
+// ---------------------------------------------------------------------------
+// Identity — the single source for every link on the site. Every social row,
+// CTA and the contact screen reads from here, so one edit lands everywhere.
+// ---------------------------------------------------------------------------
+const String github = "https://github.com/NikhilYadav04";
+const String linkedIn = "https://www.linkedin.com/in/nikhil-yadav-1a14062a2";
+const String leetCode = "https://leetcode.com/u/byadav1723/";
+const String instagram = "https://www.instagram.com/yadav_17_05/";
+const String email = "byadav1723@gmail.com";
+
+/// One entry in a social row. Brand marks are SVGs (tinted by the caller so
+/// every row renders them in one colour); email uses a Material glyph.
+class SocialLink {
+  final String label;
+  final String url;
+  final String? svgAsset;
+  final IconData? icon;
+  const SocialLink(this.label, this.url, {this.svgAsset, this.icon});
+}
+
+/// Rendered, in this order, by the desktop business card, the phone's Profile
+/// card and the About screen.
+const List<SocialLink> socialLinks = [
+  SocialLink("GitHub", github, svgAsset: "assets/icons/github.svg"),
+  SocialLink("LinkedIn", linkedIn, svgAsset: "assets/icons/linkedin.svg"),
+  SocialLink("LeetCode", leetCode, svgAsset: "assets/icons/leetcode.svg"),
+  SocialLink("Instagram", instagram, svgAsset: "assets/icons/instagram.svg"),
+  SocialLink("Email", "mailto:$email", icon: Icons.mail_outline),
+];
 
 // ---------------------------------------------------------------------------
 // Phase 3 — About rebuilt as a RAG-style chat. Scripted Q&A "answered" from

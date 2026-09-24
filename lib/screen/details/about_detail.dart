@@ -1,9 +1,9 @@
 import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/social_row.dart';
 import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 /// About detail — avatar, name, role, the bio card, and the same proof strip
@@ -13,16 +13,11 @@ import 'package:provider/provider.dart';
 class AboutDetail extends StatelessWidget {
   const AboutDetail({super.key});
 
+  // [value, label, link] — the rating links to the profile that backs it.
   static const _stats = [
-    ["7", "projects"],
-    ["5", "roles"],
-    ["1868", "leetcode"],
-  ];
-
-  static const _socials = [
-    ["assets/icons/github.svg", github],
-    ["assets/icons/linkedin.svg", linkedIn],
-    ["assets/icons/twitter.svg", twitter],
+    ["7", "projects", ""],
+    ["5", "roles", ""],
+    ["1868", "leetcode", leetCode],
   ];
 
   @override
@@ -76,7 +71,11 @@ class AboutDetail extends StatelessWidget {
             for (int i = 0; i < _stats.length; i++) ...[
               if (i > 0) const SizedBox(width: 10),
               Expanded(
-                child: Readout(value: _stats[i][0], label: _stats[i][1]),
+                child: Readout(
+                  value: _stats[i][0],
+                  label: _stats[i][1],
+                  url: _stats[i][2].isEmpty ? null : _stats[i][2],
+                ),
               ),
             ],
           ],
@@ -103,44 +102,13 @@ class AboutDetail extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 18),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (final s in _socials)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6),
-                child: _social(context, state, s[0], s[1]),
-              ),
-          ],
+        SocialRow(
+          iconColor: state.inkAccent,
+          fill: state.chipFill,
+          size: 38,
+          gap: 10,
         ),
       ],
-    );
-  }
-
-  Widget _social(
-      BuildContext context, CurrentState state, String asset, String link) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () => context.read<CurrentState>().launchInBrowser(link),
-        behavior: HitTestBehavior.opaque,
-        child: Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: state.chipFill,
-          ),
-          child: Center(
-            child: SvgPicture.asset(
-              asset,
-              width: 16,
-              height: 16,
-              colorFilter: ColorFilter.mode(state.inkAccent, BlendMode.srcIn),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
