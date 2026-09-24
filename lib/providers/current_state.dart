@@ -1,7 +1,10 @@
+import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/consts/moods.dart';
 import 'package:device_frame/device_frame.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../utils/session_flag.dart';
 
 import '../screen/homescreen/phone_home_page.dart';
 
@@ -18,7 +21,7 @@ class CurrentState extends ChangeNotifier {
 
   // Derived sky properties — UI reads these instead of holding their own copies.
   Gradient get bgGradient => mood.gradient;
-  String get selectedCloud => mood.cloudSvg;
+  List<Color> get hillTones => mood.hillTones;
   Color get accent => mood.accent;
   RainIntensity get rain => mood.rain;
 
@@ -55,7 +58,11 @@ class CurrentState extends ChangeNotifier {
   // (0,0) = screen centre. Layers multiply this by their own depth factor.
   // ---------------------------------------------------------------------------
 
-  Offset pointer = Offset.zero;
+  /// Its own notifier, not part of this ChangeNotifier: the cursor moves many
+  /// times a second, and notifying through [CurrentState] rebuilt every
+  /// widget that watches it — the whole phone UI included — on each move.
+  /// Only the parallax layers listen to this.
+  final ValueNotifier<Offset> pointer = ValueNotifier(Offset.zero);
 
   /// Feed a raw global pointer position + the screen size; we normalize here so
   /// callers stay dumb. Clamped to [-1, 1].
@@ -70,24 +77,25 @@ class CurrentState extends ChangeNotifier {
 
     // Ease toward the target (0..1; lower = smoother/heavier).
     const double ease = 0.18;
+    final Offset p = pointer.value;
     final Offset eased = Offset(
-      pointer.dx + (nx - pointer.dx) * ease,
-      pointer.dy + (ny - pointer.dy) * ease,
+      p.dx + (nx - p.dx) * ease,
+      p.dy + (ny - p.dy) * ease,
     );
 
     // Skip near-identical updates so we don't rebuild on micro-movements.
-    if ((eased.dx - pointer.dx).abs() < 0.004 &&
-        (eased.dy - pointer.dy).abs() < 0.004) {
+    if ((eased.dx - p.dx).abs() < 0.004 && (eased.dy - p.dy).abs() < 0.004) {
       return;
     }
-    pointer = eased;
-    notifyListeners();
+    pointer.value = eased;
   }
 
-  void resetPointer() {
-    if (pointer == Offset.zero) return;
-    pointer = Offset.zero;
-    notifyListeners();
+  void resetPointer() => pointer.value = Offset.zero;
+
+  @override
+  void dispose() {
+    pointer.dispose();
+    super.dispose();
   }
 
   void changeSelectedDevice(DeviceInfo device) async {
@@ -96,13 +104,16 @@ class CurrentState extends ChangeNotifier {
   }
 
   // ---------------------------------------------------------------------------
-  // Phase 2 — AgentOS boot. The boot sequence plays once per load; this flag
-  // flips to true when it finishes so HomePage swaps to the real desktop.
+  // AgentOS boot. The boot sequence plays once per browser session: a reload
+  // skips straight to the home screen. The flag flips when it finishes (or is
+  // tapped to skip).
   // ---------------------------------------------------------------------------
-  bool booted = false;
+  static const String _bootedKey = 'ny.booted';
+  bool booted = readSessionFlag(_bootedKey);
   void markBooted() {
     if (booted) return;
     booted = true;
+    writeSessionFlag(_bootedKey);
     notifyListeners();
   }
 
@@ -123,6 +134,11 @@ class CurrentState extends ChangeNotifier {
       debugPrint('Could not launch $url');
     }
   }
+
+  /// Opens the résumé PDF in a new tab. Resolved against the page URL so it
+  /// works on any host (local server, custom domain).
+  Future<void> openResume() =>
+      launchInBrowser(Uri.base.resolve(resumePath).toString());
 
   void changePhoneScreen(Widget change, bool isMain, {String? titlee}) {
     title = titlee;

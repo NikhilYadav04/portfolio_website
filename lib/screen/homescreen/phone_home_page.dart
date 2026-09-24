@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../consts/data.dart';
 import '../../providers/current_state.dart';
+import '../../widgets/resume_chip.dart';
+import '../../widgets/settings_sheet.dart';
 import '../../widgets/social_row.dart';
 import '../../widgets/type_scale.dart';
 import '../details/about_detail.dart';
@@ -165,7 +167,8 @@ class _TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final ink = context.watch<CurrentState>().inkAccent;
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
+      // Right inset is smaller: the gear's 44px hit area carries its own.
+      padding: const EdgeInsets.fromLTRB(18, 1, 6, 0),
       child: Row(
         children: [
           Container(
@@ -199,7 +202,15 @@ class _TopBar extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          Icon(Icons.settings, color: ink.withOpacity(0.7), size: 20),
+          // Mood, résumé, email and socials — the only way to reach them on a
+          // phone-sized screen, where the side panels are hidden.
+          IconButton(
+            tooltip: "Settings",
+            onPressed: () => showSettingsSheet(context),
+            icon: Icon(Icons.settings, color: ink.withOpacity(0.7), size: 20),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints.tightFor(width: 44, height: 44),
+          ),
         ],
       ),
     );
@@ -250,7 +261,7 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 18),
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.45),
         borderRadius: BorderRadius.circular(20),
@@ -260,11 +271,13 @@ class _BottomNav extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: List.generate(icons.length, (i) {
           final bool on = i == active;
+          // 44px square hit area — the minimum comfortable touch target.
           return GestureDetector(
             onTap: () => onTap(i),
             behavior: HitTestBehavior.opaque,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+            child: SizedBox(
+              width: 44,
+              height: 44,
               child: Icon(
                 icons[i],
                 size: 22,
@@ -431,6 +444,8 @@ class _FooterBar extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           child: Container(
             width: double.infinity,
+            // At least 44px tall so the whole bar is an easy touch target.
+            constraints: const BoxConstraints(minHeight: 44),
             padding: const EdgeInsets.only(top: 11, bottom: 2),
             decoration: BoxDecoration(
               border: Border(top: BorderSide(color: state.hairline)),
@@ -713,6 +728,8 @@ class _ProfileCard extends StatelessWidget {
                     size: 32,
                     gap: 8,
                   ),
+                  const SizedBox(height: 16),
+                  ResumeChip(ink: state.inkAccent, fill: state.chipFill),
                 ],
               ),
             ),

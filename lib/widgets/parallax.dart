@@ -25,8 +25,8 @@ class ParallaxLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<CurrentState, Offset>(
-      selector: (_, s) => s.pointer,
+    return ValueListenableBuilder<Offset>(
+      valueListenable: context.read<CurrentState>().pointer,
       builder: (context, pointer, child) {
         final double sign = invert ? 1 : -1;
         final Offset shift = Offset(
@@ -67,8 +67,8 @@ class CursorTilt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<CurrentState, Offset>(
-      selector: (_, s) => s.pointer,
+    return ValueListenableBuilder<Offset>(
+      valueListenable: context.read<CurrentState>().pointer,
       builder: (context, pointer, child) {
         final double rotY = (pointer.dx * maxTilt).clamp(-maxTilt, maxTilt);
         final double rotX = (-pointer.dy * maxTilt).clamp(-maxTilt, maxTilt);

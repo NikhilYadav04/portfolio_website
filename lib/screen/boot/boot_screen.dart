@@ -9,7 +9,8 @@ import 'package:provider/provider.dart';
 ///
 /// Renders inside the phone frame for ~1.7s: the OS glyph fades + scales in, a
 /// loader bar fills, the version/tagline appears, then it calls
-/// [CurrentState.markBooted] to hand off to the home screen. Plays once.
+/// [CurrentState.markBooted] to hand off to the home screen. Plays once per
+/// browser session; a tap skips it.
 class BootScreen extends StatefulWidget {
   const BootScreen({super.key});
 
@@ -70,6 +71,18 @@ class _BootScreenState extends State<BootScreen>
   Widget build(BuildContext context) {
     final Color accent = context.read<CurrentState>().accent;
 
+    // Tap anywhere to skip.
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => context.read<CurrentState>().markBooted(),
+        child: _sequence(accent),
+      ),
+    );
+  }
+
+  Widget _sequence(Color accent) {
     return DecoratedBox(
       decoration: BoxDecoration(
         // Deep dark base with a soft accent glow blooming from the centre.
@@ -151,11 +164,11 @@ class _BootScreenState extends State<BootScreen>
                           ),
                           child: Text(
                             OsBrand.initials,
-                            style: GoogleFonts.exo(
+                            style: GoogleFonts.sora(
                               color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 36,
-                              letterSpacing: 1,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 34,
+                              letterSpacing: -0.5,
                             ),
                           ),
                         ),
@@ -169,11 +182,11 @@ class _BootScreenState extends State<BootScreen>
                 opacity: _captionFade.value,
                 child: Text(
                   developerName,
-                  style: GoogleFonts.exo(
+                  style: GoogleFonts.sora(
                     color: Colors.white,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w700,
                     fontSize: 22,
-                    letterSpacing: 0.5,
+                    letterSpacing: -0.4,
                   ),
                 ),
               ),

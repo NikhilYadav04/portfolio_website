@@ -1,99 +1,140 @@
 import 'package:awesome_portfolio/consts/moods.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
-import 'package:custom_button_builder/custom_button_builder.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-/// Phase 1 — the right-side glass panel's content.
+import 'type_scale.dart';
+
+/// Right-hand upper panel: pick the mood, which re-colours the whole world
+/// (sky, hills, rain, accents, the phone inside).
 ///
-/// Replaces the original six raw color buttons with a labeled "mood" picker.
-/// Each swatch sets a full world state (sky + clouds + rain + accent) and the
-/// active mood's name is shown beneath, so the control reads as intentional
-/// rather than a palette.
+/// Flat swatches, each named, with a ring on the current one. The old 3D
+/// press-buttons were a separate visual style and gave no hint what each
+/// colour did.
 class MoodPicker extends StatelessWidget {
-  final double widthRatio;
-  const MoodPicker({super.key, required this.widthRatio});
+  const MoodPicker({super.key});
+
+  static String _rainLabel(RainIntensity r) => switch (r) {
+    RainIntensity.none => "no rain",
+    RainIntensity.light => "light rain",
+    RainIntensity.heavy => "heavy rain",
+  };
 
   @override
   Widget build(BuildContext context) {
-    final CurrentState state =
-        Provider.of<CurrentState>(context, listen: false);
-    final double swatch = 46 * widthRatio;
+    final Mood current = context.select<CurrentState, Mood>(
+      (s) => s.currentMood,
+    );
+    final MoodSpec spec = moodSpec(current);
+    final Color dim = Colors.white.withOpacity(0.62);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            "MOOD",
-            style: GoogleFonts.exo(
-              color: Colors.white.withOpacity(0.7),
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
-              letterSpacing: 3,
-            ),
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            alignment: WrapAlignment.center,
-            children: List.generate(moods.length, (index) {
-              return Consumer<CurrentState>(builder: (context, s, __) {
-                final bool selected = s.selectedMoodIndex == index;
-                final spec = moods[index];
-                return Container(
-                  margin: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    // Accent ring + glow on the selected mood.
-                    border: Border.all(
-                      color: selected ? Colors.white : Colors.transparent,
-                      width: 2.5,
-                    ),
-                    boxShadow: selected
-                        ? [
-                            BoxShadow(
-                              color: spec.accent.withOpacity(0.7),
-                              blurRadius: 14,
-                              spreadRadius: 1,
-                            )
-                          ]
-                        : null,
-                  ),
-                  child: CustomButton(
-                    pressed:
-                        selected ? Pressed.pressed : Pressed.notPressed,
-                    animate: true,
-                    borderRadius: 100,
-                    shadowColor: Colors.blueGrey[50],
-                    isThreeD: true,
-                    backgroundColor: spec.accent,
-                    width: swatch,
-                    height: swatch,
-                    onPressed: () => state.setMoodByIndex(index),
-                  ),
-                );
-              });
-            }),
-          ),
-          const SizedBox(height: 16),
-          // Active mood name — animated swap so it feels responsive.
-          Consumer<CurrentState>(builder: (context, s, __) {
-            return AnimatedSwitcher(
+    // Sized to its content and centred, so it sits in the middle of a fixed
+    // panel and wraps tightly in the settings sheet.
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("mood", style: monoStyle(dim, size: 10.5)),
+            const SizedBox(height: 8),
+            AnimatedSwitcher(
               duration: const Duration(milliseconds: 250),
               child: Text(
-                s.mood.label,
-                key: ValueKey(s.currentMood),
-                style: GoogleFonts.exo(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
+                spec.label,
+                key: ValueKey(current),
+                style: displayStyle(Colors.white, size: 30),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(_rainLabel(spec.rain), style: monoStyle(dim, size: 10.5)),
+            const SizedBox(height: 26),
+            for (final row in [moods.sublist(0, 3), moods.sublist(3)]) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (final m in row)
+                    _Swatch(spec: m, selected: m.mood == current),
+                ],
+              ),
+              const SizedBox(height: 14),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Swatch extends StatefulWidget {
+  final MoodSpec spec;
+  final bool selected;
+  const _Swatch({required this.spec, required this.selected});
+
+  @override
+  State<_Swatch> createState() => _SwatchState();
+}
+
+class _SwatchState extends State<_Swatch> {
+  bool _focus = false;
+
+  void _pick() => context.read<CurrentState>().setMood(widget.spec.mood);
+
+  @override
+  Widget build(BuildContext context) {
+    final bool on = widget.selected;
+    final Color c = widget.spec.accent;
+    return Semantics(
+      button: true,
+      selected: on,
+      label: "${widget.spec.label} mood",
+      child: FocusableActionDetector(
+        mouseCursor: SystemMouseCursors.click,
+        onShowFocusHighlight: (v) => setState(() => _focus = v),
+        shortcuts: const {
+          SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
+          SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
+        },
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) {
+              _pick();
+              return null;
+            },
+          ),
+        },
+        child: GestureDetector(
+          onTap: _pick,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: c,
+                  border: on || _focus
+                      ? Border.all(color: Colors.white, width: 2)
+                      : null,
+                  boxShadow: on
+                      ? [BoxShadow(color: c.withOpacity(0.45), spreadRadius: 4)]
+                      : null,
                 ),
               ),
-            );
-          }),
-        ],
+              const SizedBox(height: 7),
+              Text(
+                widget.spec.label.toLowerCase(),
+                style: monoStyle(
+                  on ? Colors.white : Colors.white.withOpacity(0.62),
+                  size: 9.5,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

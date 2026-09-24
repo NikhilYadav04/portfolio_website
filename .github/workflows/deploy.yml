@@ -34,16 +34,13 @@ jobs:
         run: flutter pub get
 
       - name: Refresh GitHub contributions
-        # Real data for the contribution graph. Only replaces the committed
-        # snapshot in assets/data/ when the response is valid, so a failed
-        # fetch never ships an empty or broken graph.
+        # Real data for the contribution graph, read from GitHub's own calendar.
+        # The script leaves assets/data/contributions.json untouched and exits
+        # non-zero if the fetch or parse fails, so a bad run ships the committed
+        # snapshot rather than an empty graph.
         run: |
-          if curl -sf --max-time 30                "https://github-contributions-api.jogruber.de/v4/NikhilYadav04?y=last"                -o /tmp/contributions.json              && jq -e '.contributions | length > 0' /tmp/contributions.json > /dev/null; then
-            mv /tmp/contributions.json assets/data/contributions.json
-            echo "Contributions refreshed."
-          else
-            echo "::warning::Contribution refresh failed; shipping the committed snapshot."
-          fi
+          python3 tool/fetch_contributions.py \
+            || echo "::warning::Contribution refresh failed; shipping the committed snapshot."
 
       - name: Build web
         # Custom domain (nikhil.runs-on.dev) serves from the root, so the

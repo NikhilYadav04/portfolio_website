@@ -5,5 +5,8 @@ class DeviceModel {
   DeviceInfo device;
   IconData icon;
 
-  DeviceModel({required this.device, required this.icon});
+  /// Name shown in the device switch under the phone.
+  String label;
+
+  DeviceModel({required this.device, required this.icon, required this.label});
 }

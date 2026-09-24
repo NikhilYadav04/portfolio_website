@@ -1,6 +1,7 @@
 import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +50,7 @@ class SocialRow extends StatelessWidget {
   }
 }
 
-class _SocialButton extends StatelessWidget {
+class _SocialButton extends StatefulWidget {
   final SocialLink link;
   final double size;
   final Color iconColor;
@@ -65,7 +66,20 @@ class _SocialButton extends StatelessWidget {
   });
 
   @override
+  State<_SocialButton> createState() => _SocialButtonState();
+}
+
+class _SocialButtonState extends State<_SocialButton> {
+  bool _focus = false;
+
+  void _open() =>
+      context.read<CurrentState>().launchInBrowser(widget.link.url);
+
+  @override
   Widget build(BuildContext context) {
+    final link = widget.link;
+    final size = widget.size;
+    final iconColor = widget.iconColor;
     final double glyph = size * 0.44;
     return Semantics(
       link: true,
@@ -73,19 +87,35 @@ class _SocialButton extends StatelessWidget {
       child: Tooltip(
         message: link.label,
         waitDuration: const Duration(milliseconds: 400),
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
+        child: FocusableActionDetector(
+          mouseCursor: SystemMouseCursors.click,
+          onShowFocusHighlight: (v) => setState(() => _focus = v),
+          shortcuts: const {
+            SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
+            SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),
+          },
+          actions: {
+            ActivateIntent: CallbackAction<ActivateIntent>(
+              onInvoke: (_) {
+                _open();
+                return null;
+              },
+            ),
+          },
           child: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () =>
-                context.read<CurrentState>().launchInBrowser(link.url),
+            onTap: _open,
             child: Container(
               width: size,
               height: size,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: fill,
-                border: border == null ? null : Border.all(color: border!),
+                color: widget.fill,
+                border: _focus
+                    ? Border.all(color: iconColor, width: 2)
+                    : widget.border == null
+                    ? null
+                    : Border.all(color: widget.border!),
               ),
               child: Center(
                 child: link.svgAsset != null
@@ -93,8 +123,10 @@ class _SocialButton extends StatelessWidget {
                         link.svgAsset!,
                         width: glyph,
                         height: glyph,
-                        colorFilter:
-                            ColorFilter.mode(iconColor, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(
+                          iconColor,
+                          BlendMode.srcIn,
+                        ),
                       )
                     : Icon(link.icon, size: glyph + 2, color: iconColor),
               ),

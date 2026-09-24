@@ -12,36 +12,35 @@ import 'package:google_fonts/google_fonts.dart';
 
 /// Card and page titles.
 TextStyle displayStyle(Color ink, {double size = 25}) => GoogleFonts.sora(
-      color: ink,
-      fontWeight: FontWeight.w700,
-      fontSize: size,
-      letterSpacing: -0.5,
-    );
+  color: ink,
+  fontWeight: FontWeight.w700,
+  fontSize: size,
+  letterSpacing: -0.5,
+);
 
 /// Eyebrows, dates, scores, footer labels, section labels.
-TextStyle monoStyle(Color color,
-        {double size = 9.5, FontWeight weight = FontWeight.w400}) =>
-    GoogleFonts.firaCode(
-      color: color,
-      fontSize: size,
-      letterSpacing: 0.4,
-      fontWeight: weight,
-    );
+TextStyle monoStyle(
+  Color color, {
+  double size = 9.5,
+  FontWeight weight = FontWeight.w400,
+}) => GoogleFonts.firaCode(
+  color: color,
+  fontSize: size,
+  letterSpacing: 0.4,
+  fontWeight: weight,
+);
 
 /// The bold line of a list row.
 TextStyle rowTitleStyle(Color color, {double size = 13.5}) => GoogleFonts.inter(
-      color: color,
-      fontSize: size,
-      fontWeight: FontWeight.w700,
-    );
+  color: color,
+  fontSize: size,
+  fontWeight: FontWeight.w700,
+);
 
 /// The muted second line of a list row.
 TextStyle rowSubStyle(Color color, {double size = 11}) =>
     GoogleFonts.inter(color: color, fontSize: size);
 
 /// Running prose inside a detail card.
-TextStyle bodyStyle(Color color) => GoogleFonts.inter(
-      color: color,
-      fontSize: 13,
-      height: 1.55,
-    );
+TextStyle bodyStyle(Color color) =>
+    GoogleFonts.inter(color: color, fontSize: 13, height: 1.55);

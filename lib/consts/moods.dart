@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Phase 1 — reactive world.
 ///
 /// A [Mood] is a complete "world state" for the sky behind the phone: a sky
-/// gradient, which cloud SVG drifts across it, how hard it rains, and the
+/// gradient, the colours of the hills beneath it, how hard it rains, and the
 /// accent glow that ties the whole UI (phone tilt highlight, status orb,
 /// picker selection) to that mood.
 ///
@@ -27,7 +27,11 @@ class MoodSpec {
   final Mood mood;
   final String label;
   final Gradient gradient;
-  final String cloudSvg;
+
+  /// The four hill layers, far to near, in the same dark / mid / light /
+  /// dark-front rhythm as the original artwork — so every mood keeps the
+  /// silhouette depth while the colour follows its sky. Drawn by `MoodHills`.
+  final List<Color> hillTones;
 
   /// The single accent color for this mood. Used for the picker selection ring,
   /// the agent orb glow, and the phone's tilt highlight. This is the swatch
@@ -39,14 +43,12 @@ class MoodSpec {
     required this.mood,
     required this.label,
     required this.gradient,
-    required this.cloudSvg,
+    required this.hillTones,
     required this.accent,
     required this.rain,
   });
 }
 
-const String _cloudBlue = "assets/images/cloudyBlue.svg";
-const String _cloudRed = "assets/images/cloudRed.svg";
 
 /// Ordered list — the mood picker renders these in this order, and index 1
 /// (midday) is the default so the first paint matches the original blue sky.
@@ -55,7 +57,7 @@ const List<MoodSpec> moods = [
     mood: Mood.dawn,
     label: "Dawn",
     accent: Color(0xFFFFC371),
-    cloudSvg: _cloudRed,
+    hillTones: [Color(0xFF3D1F47), Color(0xFF63315B), Color(0xFF964056), Color(0xFF502753)],
     rain: RainIntensity.none,
     gradient: LinearGradient(
       begin: Alignment.bottomLeft,
@@ -67,7 +69,7 @@ const List<MoodSpec> moods = [
     mood: Mood.midday,
     label: "Midday",
     accent: Color(0xFF4DA3FF),
-    cloudSvg: _cloudBlue,
+    hillTones: [Color(0xFF182F5D), Color(0xFF25467D), Color(0xFF356CB1), Color(0xFF273374)],
     rain: RainIntensity.light,
     gradient: LinearGradient(
       begin: Alignment.topLeft,
@@ -78,7 +80,7 @@ const List<MoodSpec> moods = [
     mood: Mood.dusk,
     label: "Dusk",
     accent: Color(0xFFFF6B9D),
-    cloudSvg: _cloudBlue,
+    hillTones: [Color(0xFF462150), Color(0xFF6C336C), Color(0xFF9B467C), Color(0xFF4F2B5F)],
     rain: RainIntensity.none,
     gradient: LinearGradient(
       begin: Alignment.topLeft,
@@ -90,7 +92,7 @@ const List<MoodSpec> moods = [
     mood: Mood.storm,
     label: "Storm",
     accent: Color(0xFF7AA0C4),
-    cloudSvg: _cloudBlue,
+    hillTones: [Color(0xFF23292F), Color(0xFF31383F), Color(0xFF46535D), Color(0xFF2A3037)],
     rain: RainIntensity.heavy,
     gradient: LinearGradient(
       begin: Alignment.topLeft,
@@ -102,7 +104,7 @@ const List<MoodSpec> moods = [
     mood: Mood.night,
     label: "Night",
     accent: Color(0xFF8E7BFF),
-    cloudSvg: _cloudBlue,
+    hillTones: [Color(0xFF0F2433), Color(0xFF1C384A), Color(0xFF2F5B6F), Color(0xFF172A40)],
     rain: RainIntensity.light,
     gradient: LinearGradient(
       begin: Alignment.topLeft,
@@ -114,7 +116,7 @@ const List<MoodSpec> moods = [
     mood: Mood.aurora,
     label: "Aurora",
     accent: Color(0xFF00E0C6),
-    cloudSvg: _cloudBlue,
+    hillTones: [Color(0xFF1C224A), Color(0xFF283962), Color(0xFF2D6A76), Color(0xFF212B54)],
     rain: RainIntensity.none,
     gradient: LinearGradient(
       begin: Alignment.bottomRight,

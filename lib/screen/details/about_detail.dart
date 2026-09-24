@@ -1,6 +1,7 @@
 import 'package:awesome_portfolio/consts/data.dart';
 import 'package:awesome_portfolio/providers/current_state.dart';
 import 'package:awesome_portfolio/screen/details/detail_scaffold.dart';
+import 'package:awesome_portfolio/widgets/resume_chip.dart';
 import 'package:awesome_portfolio/widgets/social_row.dart';
 import 'package:awesome_portfolio/widgets/type_scale.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,8 @@ class AboutDetail extends StatelessWidget {
           size: 38,
           gap: 10,
         ),
+        const SizedBox(height: 16),
+        Center(child: ResumeChip(ink: state.inkAccent, fill: state.chipFill)),
       ],
     );
   }

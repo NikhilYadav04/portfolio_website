@@ -2,7 +2,10 @@ import 'package:awesome_portfolio/consts/moods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:provider/provider.dart';
 import 'package:rive/rive.dart';
+
+import '../providers/current_state.dart';
 
 class Rain extends StatefulWidget {
   const Rain({
@@ -55,8 +58,10 @@ class _RainState extends State<Rain> {
     rootBundle.load('assets/rive/rain.riv').then((data) {
       final file = RiveFile.import(data);
       final artBoard = file.mainArtboard;
-      var controller =
-          StateMachineController.fromArtboard(artBoard, 'State Machine 1');
+      var controller = StateMachineController.fromArtboard(
+        artBoard,
+        'State Machine 1',
+      );
 
       if (controller != null) {
         // do something here matey
@@ -78,35 +83,49 @@ class _RainState extends State<Rain> {
     return TweenAnimationBuilder(
       duration: const Duration(seconds: 600),
       tween: Tween(
-          begin: widget.oposite ? size.width.toDouble() - 150 : 0.0,
-          end: widget.oposite ? 0.0 : size.width.toDouble() - 150),
+        begin: widget.oposite ? size.width.toDouble() - 150 : 0.0,
+        end: widget.oposite ? 0.0 : size.width.toDouble() - 150,
+      ),
       builder: (context, value, _) {
         return Positioned(
-          top: widget.top,
-          right: value,
-          child: MouseRegion(
-            onEnter: (_) {
-              hover?.value = true;
-            },
-            onExit: (_) {
-              hover?.value = false;
-            },
-            child: GestureDetector(
-              onTap: () => playRain(),
-              child: SizedBox(
-                height: 100,
-                width: 220,
-                child: waterArtBoard != null
-                    ? Rive(
-                        useArtboardSize: true,
-                        artboard: waterArtBoard!,
-                        fit: BoxFit.cover,
-                      )
-                    : Container(),
+              top: widget.top,
+              right: value,
+              child: MouseRegion(
+                onEnter: (_) {
+                  hover?.value = true;
+                },
+                onExit: (_) {
+                  hover?.value = false;
+                },
+                child: GestureDetector(
+                  onTap: () => playRain(),
+                  child: SizedBox(
+                    height: 100,
+                    width: 220,
+                    child: waterArtBoard != null
+                        // A light wash of the mood accent so the glossy cloud
+                        // belongs to the scene instead of staying cyan under every
+                        // sky. srcATop tints only the cloud's own pixels; a
+                        // blend like BlendMode.color would also paint the
+                        // transparent box around it.
+                        ? ColorFiltered(
+                            colorFilter: ColorFilter.mode(
+                              context
+                                  .select<CurrentState, Color>((s) => s.accent)
+                                  .withOpacity(0.35),
+                              BlendMode.srcATop,
+                            ),
+                            child: Rive(
+                              useArtboardSize: true,
+                              artboard: waterArtBoard!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(),
+                  ),
+                ),
               ),
-            ),
-          ),
-        )
+            )
             .animate()
             .fadeIn(delay: 1.5.seconds, duration: .35.seconds)
             .slide(begin: const Offset(0, .2));

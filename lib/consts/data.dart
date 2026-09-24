@@ -9,18 +9,22 @@ import '../models/skill_model.dart';
 const double baseHeight = 790;
 const double baseWidth = 1440;
 
+/// Frames the portfolio can be viewed in, in switcher order.
 List<DeviceModel> devices = [
   DeviceModel(
     device: Devices.android.onePlus8Pro,
     icon: Icons.android,
+    label: "Android",
   ),
   DeviceModel(
     device: Devices.ios.iPhone13,
     icon: Icons.apple,
+    label: "iPhone",
   ),
   DeviceModel(
     device: Devices.ios.iPad,
     icon: Icons.tablet,
+    label: "iPad",
   ),
 ];
 
@@ -221,17 +225,21 @@ final List<JobExperience> jobExperiences = [
 // ---------------------------------------------------------------------------
 
 const String developerName = "Nikhil Yadav";
-const String developerTagline = "Building AI Agents & Mobile Apps";
+const String developerTagline = "Building AI agents & mobile apps";
 const String statusLine = "currently building AI agents";
 const String localTimezoneLabel = "IST";
 
-/// Rotating quotes shown in the right panel under the mood picker.
-const List<List<String>> rotatingQuotes = [
-  ["Build agents that ship inside great apps.", "— working principle"],
-  ["Don't run after success, run after perfection.", "— Rancho"],
-  ["The best UI is the one that anticipates you.", "— design note"],
-];
+/// What kind of work Nikhil is looking for, under "open to work".
+const String openTo = "internships · full-time";
 
+/// Rotating proof points in the right-hand panel: [headline, detail]. Each one
+/// is backed by something elsewhere on the site.
+const List<List<String>> highlights = [
+  ["1st · YPIPA hackathon", "pillbin · 20+ teams"],
+  ["SIH finalist", "top 0.5% of 2500+ teams"],
+  ["LeetCode Knight", "1868 rating"],
+  ["9.07 CGPA", "B.Tech ECE · IIIT Ranchi"],
+];
 // ---------------------------------------------------------------------------
 // Phase 4 — Projects "App Store". Placeholder cards; swap for real apps.
 // ---------------------------------------------------------------------------
@@ -294,6 +302,10 @@ const String linkedIn = "https://www.linkedin.com/in/nikhil-yadav-1a14062a2";
 const String leetCode = "https://leetcode.com/u/byadav1723/";
 const String instagram = "https://www.instagram.com/yadav_17_05/";
 const String email = "byadav1723@gmail.com";
+
+/// Served from `web/resume.pdf`, so it ships with every deploy. Replace that
+/// file to update the résumé; the path stays the same.
+const String resumePath = "/resume.pdf";
 
 /// One entry in a social row. Brand marks are SVGs (tinted by the caller so
 /// every row renders them in one colour); email uses a Material glyph.
