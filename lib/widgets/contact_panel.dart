@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../consts/data.dart';
 import '../providers/current_state.dart';
 import 'glass_button.dart';
+import 'mascot/mascot_director.dart';
 import 'pulse_dot.dart';
 import 'type_scale.dart';
 
@@ -25,10 +26,7 @@ class ContactPanel extends StatelessWidget {
             children: [
               PulseDot(color: accent),
               const SizedBox(width: 8),
-              Text(
-                "open to work",
-                style: monoStyle(Colors.white, size: 10.5),
-              ),
+              Text("open to work", style: monoStyle(Colors.white, size: 10.5)),
             ],
           ),
           const SizedBox(height: 3),
@@ -38,11 +36,16 @@ class ContactPanel extends StatelessWidget {
             child: Text(openTo, style: monoStyle(dim, size: 10)),
           ),
           const SizedBox(height: 12),
-          GlassButton(
-            label: "Résumé",
-            icon: Icons.description_outlined,
-            primary: true,
-            onTap: () => context.read<CurrentState>().openResume(),
+          // Strobi gets excited while the Résumé button is hovered.
+          MouseRegion(
+            onEnter: (_) => MascotDirector.instance.resumeHover(true),
+            onExit: (_) => MascotDirector.instance.resumeHover(false),
+            child: GlassButton(
+              label: "Résumé",
+              icon: Icons.description_outlined,
+              primary: true,
+              onTap: () => context.read<CurrentState>().openResume(),
+            ),
           ),
           const SizedBox(height: 10),
           GlassButton(

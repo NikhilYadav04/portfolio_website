@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'mascot/mascot_director.dart';
 import 'type_scale.dart';
 
 /// Right-hand upper panel: pick the mood, which re-colours the whole world
@@ -51,6 +52,9 @@ class MoodPicker extends StatelessWidget {
             Text(_rainLabel(spec.rain), style: monoStyle(dim, size: 10.5)),
             const SizedBox(height: 26),
             for (final row in [moods.sublist(0, 3), moods.sublist(3)]) ...[
+              // Between the rows only: a trailing gap would push the panel
+              // content into Strobi's perch.
+              if (row.first != moods.first) const SizedBox(height: 14),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -58,7 +62,6 @@ class MoodPicker extends StatelessWidget {
                     _Swatch(spec: m, selected: m.mood == current),
                 ],
               ),
-              const SizedBox(height: 14),
             ],
           ],
         ),
@@ -92,6 +95,9 @@ class _SwatchState extends State<_Swatch> {
       child: FocusableActionDetector(
         mouseCursor: SystemMouseCursors.click,
         onShowFocusHighlight: (v) => setState(() => _focus = v),
+        // Strobi previews the mood while it's hovered, before any click.
+        onShowHoverHighlight: (v) =>
+            MascotDirector.instance.preview(v ? widget.spec.mood : null),
         shortcuts: const {
           SingleActivator(LogicalKeyboardKey.enter): ActivateIntent(),
           SingleActivator(LogicalKeyboardKey.space): ActivateIntent(),

@@ -1,71 +1,37 @@
+# Nikhil Yadav · Portfolio
 
-# Awesome Portfolio
+**Live:** [nikhil.runs-on.dev](https://nikhil.runs-on.dev)
 
-Created this website with inspiration from Pawan Sir, later decided to create tutorial of how you can make this website, it is easier than it looks!
-Lets get started
-## final Version :
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_08.gif' style="display:block; margin-left:auto;margin-right:auto;">
+My portfolio, built in Flutter for the web. A phone sits in a sky that changes with the mood you pick: sky, hills, rain, glass panels and the app inside all follow it. Strobi, the mascot on the mood panel, acts the mood out too.
 
-## Steps
-This repository contains a series of branches, each representing a step in the development of the website. You can follow these steps to see the website's progression from its initial state to the final product.
+## Run it
 
-**Step 1: Initial Setup**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_01.png' width=900 style="display:block; margin-left:auto;margin-right:auto;">
+```sh
+flutter pub get
+flutter run -d chrome
+```
 
-- Branch: `step_01`
-- Description: The starting point of the project. Basic Hello world example inside the device screen
+The résumé (`/resume.pdf`) is only served by a release build:
 
-**Step 2: Adding Structure**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_02.png' width=900 style="display:block; margin-left:auto;margin-right:auto;">
+```sh
+flutter build web --release --base-href "/"
+```
 
-- Branch: `step_02`
-- Description: Added the background bottom clouds and added gradient
+Pushing to `master` deploys to GitHub Pages via `.github/workflows/deploy.yml`. Each deploy refreshes the contribution graph from my GitHub profile (`tool/fetch_contributions.py`).
 
-**Step 3: Styling and Design**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_03.gif' style="display:block; margin-left:auto;margin-right:auto;">
+## Mascot
 
-- Branch: `step_03`
-- Description: Added device changing functionality and statemanagement setup using provider
+Strobi was designed in [Bible Strong Avatar Lab](https://github.com/smontlouis/bible-strong-avatar-lab). The site's version is generated from the Studio export:
 
-**Step 4: Responsive Design**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_04.png' width=900 style="display:block; margin-left:auto;margin-right:auto;">
+```sh
+python tool/mascot/build_strobi.py
+```
 
-- Branch: `step_04`
-- Description: Added the Frosted Containers
+## Credits
 
-**Step 5: Adding Functionality**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_05.gif' style="display:block; margin-left:auto;margin-right:auto;"/>
+- **Original template:** this project started from [high-coder/awesome_portfolio](https://github.com/high-coder/awesome_portfolio). That repository states no licence, so any code that remains from it belongs to its author and isn't covered by the licence below.
+- **Mascot renderer:** [`@bible-strong/avatar-web`](https://github.com/smontlouis/bible-strong-avatar-lab) by Stéphane Montlouis-Calixte, AGPL-3.0. It's loaded at runtime from jsDelivr and isn't stored in this repo.
 
-- Branch: `step_05`
-- Description: Added the colour pallete and theme changing feature of the website
+## Licence
 
-**Step 6: Content Population**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_06.png' width=900 style="display:block; margin-left:auto;margin-right:auto;">
-
-- Branch: `step_06`
-- Description: Designing the home Screen of the phone, the apps
-
-**Step 7: Performance Optimization**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_07.gif' style="display:block; margin-left:auto;margin-right:auto;">
-
-- Branch: `step_07`
-- Description: Added screen changing functionality
-
-**Step 8: Final Product**
-<br/>
-<img src='https://raw.githubusercontent.com/high-coder/public_images/main/github/step_08.gif' style="display:block; margin-left:auto;margin-right:auto;">
-
-- Branch: `step_08`
-- Description: The final version of the website, including tons of changes including adding assets, responsiveness, and giving the frosted containers 3d effect.
-
-You can start from `step_01` and gradually switch to the subsequent branches as you progress through the development. Make sure to check each branch's README or commit messages for specific details on what changes were made in each step.
-
-Feel free to explore the code, contribute, and provide feedback. Enjoy building your project!
-
+My code in this repository is licensed under the [GNU Affero General Public License v3.0](LICENSE).

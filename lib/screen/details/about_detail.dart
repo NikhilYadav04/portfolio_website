@@ -39,7 +39,7 @@ class AboutDetail extends StatelessWidget {
               shape: BoxShape.circle,
               border: Border.all(color: Colors.white, width: 3),
               boxShadow: [
-                BoxShadow(color: accent.withOpacity(0.35), blurRadius: 18)
+                BoxShadow(color: accent.withOpacity(0.35), blurRadius: 18),
               ],
             ),
             child: ClipOval(
@@ -57,13 +57,17 @@ class AboutDetail extends StatelessWidget {
         ),
         const SizedBox(height: 14),
         Center(
-          child: Text("Nikhil Yadav",
-              style: displayStyle(state.textPrimary, size: 23)),
+          child: Text(
+            "Nikhil Yadav",
+            style: displayStyle(state.textPrimary, size: 23),
+          ),
         ),
         const SizedBox(height: 5),
         Center(
-          child: Text("Building AI agents & mobile apps",
-              style: rowSubStyle(state.textMuted, size: 12.5)),
+          child: Text(
+            "Building AI agents & mobile apps",
+            style: rowSubStyle(state.textMuted, size: 12.5),
+          ),
         ),
         const SizedBox(height: 18),
         // Proof strip — same three numbers as the Profile card.
@@ -110,7 +114,26 @@ class AboutDetail extends StatelessWidget {
           gap: 10,
         ),
         const SizedBox(height: 16),
-        Center(child: ResumeChip(ink: state.inkAccent, fill: state.chipFill)),
+        Center(
+          child: ResumeChip(ink: state.inkAccent, fill: state.chipFill),
+        ),
+        const SizedBox(height: 22),
+        // Required credit for the mascot's renderer (AGPL-3.0).
+        Center(
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () => state.launchInBrowser(
+                "https://github.com/smontlouis/bible-strong-avatar-lab",
+              ),
+              child: Text(
+                "mascot · Bible Strong Avatar Lab\nby Stéphane Montlouis-Calixte",
+                textAlign: TextAlign.center,
+                style: monoStyle(state.textMuted, size: 9),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

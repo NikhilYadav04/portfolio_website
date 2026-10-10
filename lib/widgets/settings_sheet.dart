@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../consts/data.dart';
 import '../providers/current_state.dart';
 import 'glass_button.dart';
+import 'mascot/mascot.dart';
 import 'mood_picker.dart';
 import 'social_row.dart';
 import 'type_scale.dart';
@@ -39,8 +40,12 @@ class _SettingsSheet extends StatelessWidget {
     );
     final Color dim = Colors.white.withOpacity(0.62);
     const radius = BorderRadius.vertical(top: Radius.circular(24));
+    const double mascot = 80;
 
-    return ClipRRect(
+    // Strobi sits on the sheet's top edge, half above it, as it sits on the
+    // mood panel on desktop. Outside the blurred glass: an HTML element
+    // ignores Flutter's blur.
+    final Widget glass = ClipRRect(
       borderRadius: radius,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 22, sigmaY: 22),
@@ -71,6 +76,8 @@ class _SettingsSheet extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Clears Strobi's lower half, which overlaps the glass.
+                  const SizedBox(height: 18),
                   const MoodPicker(),
                   Container(height: 1, color: Colors.white.withOpacity(0.14)),
                   const SizedBox(height: 16),
@@ -127,6 +134,22 @@ class _SettingsSheet extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: mascot / 2),
+          child: glass,
+        ),
+        const Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: Center(child: Mascot(size: mascot)),
+        ),
+      ],
     );
   }
 }

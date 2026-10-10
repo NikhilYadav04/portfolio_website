@@ -72,8 +72,7 @@ class _SocialButton extends StatefulWidget {
 class _SocialButtonState extends State<_SocialButton> {
   bool _focus = false;
 
-  void _open() =>
-      context.read<CurrentState>().launchInBrowser(widget.link.url);
+  void _open() => context.read<CurrentState>().launchInBrowser(widget.link.url);
 
   @override
   Widget build(BuildContext context) {

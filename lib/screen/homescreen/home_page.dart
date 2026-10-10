@@ -11,6 +11,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 
 import '../../widgets/frosted_container.dart';
+import '../../widgets/mascot/mascot.dart';
+import '../../widgets/mascot/mascot_director.dart';
+import '../../widgets/mascot/mascot_hint.dart';
 import '../../widgets/mood_hills.dart';
 import '../../widgets/parallax.dart';
 import '../../widgets/rain_cloud.dart';
@@ -32,6 +35,8 @@ class HomePage extends StatelessWidget {
   /// Below this the panels switch to their compact width and type.
   static const double _compactBelow = 1280;
 
+  static const double _mascotSize = 104;
+
   @override
   Widget build(BuildContext context) {
     final CurrentState currentState = Provider.of<CurrentState>(
@@ -43,7 +48,8 @@ class HomePage extends StatelessWidget {
     // Phone-sized screen: the app itself, full-screen. A phone drawn inside a
     // phone wastes the screen, and the side panels have no room — their
     // content moves to the gear's settings sheet.
-    if (size.width < _panelsMinWidth) return const _MobileApp();
+    if (size.width < _panelsMinWidth)
+      return const _ActivityListener(child: _MobileApp());
 
     final bool compact = size.width < _compactBelow;
     final double phoneHeight = size.height - 100;
@@ -57,76 +63,78 @@ class HomePage extends StatelessWidget {
     // Floor fits the contact panel: status, two buttons and the address.
     final double lowerHeight = (phoneHeight * 0.24).clamp(196.0, 220.0);
 
-    return Scaffold(
-      body: MouseRegion(
-        onHover: (event) => currentState.updatePointer(event.position, size),
-        onExit: (_) => currentState.resetPointer(),
-        child: Stack(
-          children: [
-            // Sky gradient — animated so mood changes cross-fade.
-            Selector<CurrentState, Gradient>(
-              selector: (context, provider) => provider.bgGradient,
-              builder: (context, gradient, __) => AnimatedContainer(
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeInOut,
-                decoration: BoxDecoration(gradient: gradient),
+    return _ActivityListener(
+      child: Scaffold(
+        body: MouseRegion(
+          onHover: (event) => currentState.updatePointer(event.position, size),
+          onExit: (_) => currentState.resetPointer(),
+          child: Stack(
+            children: [
+              // Sky gradient — animated so mood changes cross-fade.
+              Selector<CurrentState, Gradient>(
+                selector: (context, provider) => provider.bgGradient,
+                builder: (context, gradient, __) => AnimatedContainer(
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.easeInOut,
+                  decoration: BoxDecoration(gradient: gradient),
+                ),
               ),
-            ),
-            if (size.height > 600)
-              Selector<CurrentState, RainIntensity>(
-                selector: (context, p) => p.rain,
-                builder: (context, intensity, __) =>
-                    Rain(oposite: false, top: 300, intensity: intensity),
+              if (size.height > 600)
+                Selector<CurrentState, RainIntensity>(
+                  selector: (context, p) => p.rain,
+                  builder: (context, intensity, __) =>
+                      Rain(oposite: false, top: 300, intensity: intensity),
+                ),
+              // Hills drift on the shallowest parallax layer (feel farthest
+              // away) and take their colours from the active mood.
+              ParallaxLayer(
+                depth: 3,
+                child: RepaintBoundary(child: MoodHills(height: size.height)),
               ),
-            // Hills drift on the shallowest parallax layer (feel farthest
-            // away) and take their colours from the active mood.
-            ParallaxLayer(
-              depth: 3,
-              child: RepaintBoundary(child: MoodHills(height: size.height)),
-            ),
-            if (size.height > 600)
-              Selector<CurrentState, RainIntensity>(
-                selector: (context, p) => p.rain,
-                builder: (context, intensity, __) =>
-                    Rain(oposite: true, top: 50, intensity: intensity),
-              ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _PanelColumn(
-                      side: _Side.left,
-                      width: panelWidth,
-                      upperHeight: upperHeight,
-                      lowerHeight: lowerHeight,
-                      upper: const LiveStatusCard(),
-                      lower: const ContactPanel(),
-                    ),
-                    const SizedBox(width: 28),
-                    // The phone — mid parallax layer, tilting toward the
-                    // cursor.
-                    ParallaxLayer(
-                      depth: 4,
-                      child: CursorTilt(
-                        // RepaintBoundary: the tilt moves the phone every
-                        // frame; its contents shouldn't repaint with it.
-                        child: RepaintBoundary(
-                          child: SizedBox(
-                            height: phoneHeight,
-                            child: Selector<CurrentState, DeviceInfo>(
-                              selector: (_, s) => s.currentDevice,
-                              builder: (context, device, __) => DeviceFrame(
-                                device: device,
-                                screen: Consumer<CurrentState>(
-                                  builder: (context, s, __) => Container(
-                                    decoration: BoxDecoration(
-                                      gradient: s.bgGradient,
-                                    ),
-                                    child: ScreenWrapper(
-                                      childG: s.currentScreen,
+              if (size.height > 600)
+                Selector<CurrentState, RainIntensity>(
+                  selector: (context, p) => p.rain,
+                  builder: (context, intensity, __) =>
+                      Rain(oposite: true, top: 50, intensity: intensity),
+                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _PanelColumn(
+                        side: _Side.left,
+                        width: panelWidth,
+                        upperHeight: upperHeight,
+                        lowerHeight: lowerHeight,
+                        upper: const LiveStatusCard(),
+                        lower: const ContactPanel(),
+                      ),
+                      const SizedBox(width: 28),
+                      // The phone — mid parallax layer, tilting toward the
+                      // cursor.
+                      ParallaxLayer(
+                        depth: 4,
+                        child: CursorTilt(
+                          // RepaintBoundary: the tilt moves the phone every
+                          // frame; its contents shouldn't repaint with it.
+                          child: RepaintBoundary(
+                            child: SizedBox(
+                              height: phoneHeight,
+                              child: Selector<CurrentState, DeviceInfo>(
+                                selector: (_, s) => s.currentDevice,
+                                builder: (context, device, __) => DeviceFrame(
+                                  device: device,
+                                  screen: Consumer<CurrentState>(
+                                    builder: (context, s, __) => Container(
+                                      decoration: BoxDecoration(
+                                        gradient: s.bgGradient,
+                                      ),
+                                      child: ScreenWrapper(
+                                        childG: s.currentScreen,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -135,23 +143,25 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 28),
-                    _PanelColumn(
-                      side: _Side.right,
-                      width: panelWidth,
-                      upperHeight: upperHeight,
-                      lowerHeight: lowerHeight,
-                      upper: const MoodPicker(),
-                      lower: const Highlights(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                const DeviceSwitch(),
-              ],
-            ),
-          ],
+                      const SizedBox(width: 28),
+                      _PanelColumn(
+                        side: _Side.right,
+                        width: panelWidth,
+                        upperHeight: upperHeight,
+                        lowerHeight: lowerHeight,
+                        upper: const MoodPicker(),
+                        lower: const Highlights(),
+                        // Strobi sits on the mood panel: it acts out the mood.
+                        perch: const Mascot(size: _mascotSize),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 14),
+                  const DeviceSwitch(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -171,6 +181,11 @@ class _PanelColumn extends StatelessWidget {
   final Widget upper;
   final Widget lower;
 
+  /// Sits on the upper panel's top-right edge, half above it: outside the
+  /// glass, so the blur and the fade-in (which an HTML element ignores)
+  /// don't apply to it.
+  final Widget? perch;
+
   const _PanelColumn({
     required this.side,
     required this.width,
@@ -178,6 +193,7 @@ class _PanelColumn extends StatelessWidget {
     required this.lowerHeight,
     required this.upper,
     required this.lower,
+    this.perch,
   });
 
   @override
@@ -197,12 +213,38 @@ class _PanelColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           tilt(
-            FrostedWidget(
-              width: width,
-              height: upperHeight,
-              childW: RepaintBoundary(
-                child: upper,
-              ).animate().fadeIn(delay: .8.seconds, duration: .7.seconds),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                FrostedWidget(
+                  width: width,
+                  height: upperHeight,
+                  childW: RepaintBoundary(
+                    // Clears Strobi's lower half, which overlaps the glass.
+                    child: perch == null
+                        ? upper
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: upper,
+                          ),
+                  ).animate().fadeIn(delay: .8.seconds, duration: .7.seconds),
+                ),
+                if (perch != null)
+                  Positioned(
+                    top: -HomePage._mascotSize / 2,
+                    left: 0,
+                    right: 0,
+                    child: Center(child: perch!),
+                  ),
+                if (perch != null)
+                  // First-visit hint, to Strobi's right: open sky on that
+                  // side, where on the left it would cover the phone.
+                  Positioned(
+                    top: -HomePage._mascotSize / 2 + 18,
+                    left: width / 2 + HomePage._mascotSize / 2 + 6,
+                    child: const MascotHint(),
+                  ),
+              ],
             ),
           ),
           const SizedBox(height: 14),
@@ -217,6 +259,28 @@ class _PanelColumn extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Reports mouse, tap and scroll anywhere on the page to the mascot, so it can
+/// doze when the visitor goes quiet and wake when they're back. Translucent:
+/// it only listens, it never takes events from the widgets below.
+class _ActivityListener extends StatelessWidget {
+  final Widget child;
+  const _ActivityListener({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final director = MascotDirector.instance;
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => director.activity(),
+      // Hover and drag also steer where Strobi looks.
+      onPointerHover: (e) => director.pointer(e.position),
+      onPointerMove: (e) => director.pointer(e.position),
+      onPointerSignal: (_) => director.activity(),
+      child: child,
     );
   }
 }
