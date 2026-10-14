@@ -16,16 +16,8 @@ List<DeviceModel> devices = [
     icon: Icons.android,
     label: "Android",
   ),
-  DeviceModel(
-    device: Devices.ios.iPhone13,
-    icon: Icons.apple,
-    label: "iPhone",
-  ),
-  DeviceModel(
-    device: Devices.ios.iPad,
-    icon: Icons.tablet,
-    label: "iPad",
-  ),
+  DeviceModel(device: Devices.ios.iPhone13, icon: Icons.apple, label: "iPhone"),
+  DeviceModel(device: Devices.ios.iPad, icon: Icons.tablet, label: "iPad"),
 ];
 
 List<ColorModel> colorPalette = [
@@ -48,14 +40,15 @@ List<ColorModel> colorPalette = [
     ),
   ),
   ColorModel(
-      svgPath: "assets/images/cloudyBlue.svg",
-      color: const Color(0xff00d6ca),
-      gradient: const LinearGradient(
-        colors: [Color(0xff00ebd5), Color(0xff293474)],
-        stops: [0, 1],
-        begin: Alignment.bottomRight,
-        end: Alignment.topLeft,
-      )),
+    svgPath: "assets/images/cloudyBlue.svg",
+    color: const Color(0xff00d6ca),
+    gradient: const LinearGradient(
+      colors: [Color(0xff00ebd5), Color(0xff293474)],
+      stops: [0, 1],
+      begin: Alignment.bottomRight,
+      end: Alignment.topLeft,
+    ),
+  ),
   ColorModel(
     svgPath: "assets/images/cloudyBlue.svg",
     color: const Color(0xff123cd1),
@@ -130,9 +123,7 @@ final List<JobExperience> education = [
     company: 'Thapar Institure of Engineering',
     startDate: 'June 2021',
     endDate: 'Present',
-    bulletPoints: [
-      "Currently in the final year of my college!",
-    ],
+    bulletPoints: ["Currently in the final year of my college!"],
   ),
   JobExperience(
     color: Colors.blue,
@@ -141,9 +132,7 @@ final List<JobExperience> education = [
     company: 'Thapar Polytechnic College',
     startDate: 'June 2018',
     endDate: 'June 2021',
-    bulletPoints: [
-      'Some of the best years of college life',
-    ],
+    bulletPoints: ['Some of the best years of college life'],
   ),
 ];
 
@@ -200,7 +189,7 @@ final List<JobExperience> jobExperiences = [
     endDate: 'Oct 2021',
     bulletPoints: [
       "Collaborated as a team member in developing a cryptocurrency wallet, akin to Trust Wallet, showcasing strong teamwork and blockchain app development expertise.",
-      "Proficiently integrated REST APIs into the application, enhancing its functionality and connectivity with external services."
+      "Proficiently integrated REST APIs into the application, enhancing its functionality and connectivity with external services.",
     ],
   ),
   JobExperience(
@@ -225,7 +214,8 @@ final List<JobExperience> jobExperiences = [
 // ---------------------------------------------------------------------------
 
 const String developerName = "Nikhil Yadav";
-const String developerTagline = "Building AI agents & mobile apps";
+const String developerTagline =
+    "From Android apps to AI agent workflows: idea to production";
 const String statusLine = "currently building AI agents";
 const String localTimezoneLabel = "IST";
 
@@ -360,42 +350,15 @@ const List<AboutQA> aboutChat = [
 
 List<SkillsModel> skills = [
   SkillsModel(skillName: "Flutter", colorS: Colors.blue, iconPath: "random"),
-  SkillsModel(
-    skillName: "Firebase",
-    colorS: Colors.yellow,
-  ),
-  SkillsModel(
-    skillName: "Github",
-    colorS: Colors.yellow,
-  ),
-  SkillsModel(
-    skillName: "Dart",
-    colorS: Colors.blue,
-  ),
-  SkillsModel(
-    skillName: "Provider",
-    colorS: Colors.orange,
-  ),
-  SkillsModel(
-    skillName: "Riverpod",
-    colorS: Colors.blue,
-  ),
-  SkillsModel(
-    skillName: "CI/CD",
-    colorS: Colors.yellow,
-  ),
-  SkillsModel(
-    skillName: "Code Magic",
-    colorS: Colors.orange,
-  ),
-  SkillsModel(
-    skillName: "Firebase",
-    colorS: Colors.yellow,
-  ),
-  SkillsModel(
-    skillName: "REST API",
-    colorS: Colors.yellow,
-  ),
+  SkillsModel(skillName: "Firebase", colorS: Colors.yellow),
+  SkillsModel(skillName: "Github", colorS: Colors.yellow),
+  SkillsModel(skillName: "Dart", colorS: Colors.blue),
+  SkillsModel(skillName: "Provider", colorS: Colors.orange),
+  SkillsModel(skillName: "Riverpod", colorS: Colors.blue),
+  SkillsModel(skillName: "CI/CD", colorS: Colors.yellow),
+  SkillsModel(skillName: "Code Magic", colorS: Colors.orange),
+  SkillsModel(skillName: "Firebase", colorS: Colors.yellow),
+  SkillsModel(skillName: "REST API", colorS: Colors.yellow),
 ];
 
 List<SkillsModel> languages = [

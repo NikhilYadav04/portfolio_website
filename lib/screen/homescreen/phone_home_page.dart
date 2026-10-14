@@ -33,8 +33,9 @@ class PhoneHomeScreen extends StatefulWidget {
 }
 
 class _PhoneHomeScreenState extends State<PhoneHomeScreen> {
-  late final PageController _controller =
-      PageController(viewportFraction: 0.82);
+  late final PageController _controller = PageController(
+    viewportFraction: 0.82,
+  );
   int _page = 0;
 
   static const _navIcons = [
@@ -80,8 +81,8 @@ class _PhoneHomeScreenState extends State<PhoneHomeScreen> {
       builder: (context, ch) {
         final double current =
             (_controller.hasClients && _controller.position.haveDimensions)
-                ? (_controller.page ?? _page.toDouble())
-                : _page.toDouble();
+            ? (_controller.page ?? _page.toDouble())
+            : _page.toDouble();
         final double t = (current - index).abs().clamp(0.0, 1.0);
         return Transform.scale(
           scale: 1 - 0.06 * t,
@@ -120,8 +121,7 @@ class _PhoneHomeScreenState extends State<PhoneHomeScreen> {
                 controller: _controller,
                 itemCount: _pages.length,
                 onPageChanged: (i) => setState(() => _page = i),
-                itemBuilder: (context, i) =>
-                    _depth(i, _pages[i], reduceMotion),
+                itemBuilder: (context, i) => _depth(i, _pages[i], reduceMotion),
               ),
             ),
             const SizedBox(height: 14),
@@ -176,8 +176,10 @@ class _TopBar extends StatelessWidget {
             height: 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border:
-                  Border.all(color: Colors.white.withOpacity(0.7), width: 1.5),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.7),
+                width: 1.5,
+              ),
             ),
             child: ClipOval(
               clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -221,8 +223,11 @@ class _PageDots extends StatelessWidget {
   final int count;
   final int active;
   final Color accent;
-  const _PageDots(
-      {required this.count, required this.active, required this.accent});
+  const _PageDots({
+    required this.count,
+    required this.active,
+    required this.accent,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -312,10 +317,7 @@ class _SectionShell extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              Colors.white.withOpacity(0.92),
-              state.cardFill,
-            ],
+            colors: [Colors.white.withOpacity(0.92), state.cardFill],
           ),
           borderRadius: BorderRadius.circular(28),
           border: Border.all(color: Colors.white.withOpacity(0.85), width: 1.2),
@@ -457,8 +459,11 @@ class _FooterBar extends StatelessWidget {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: monoStyle(state.inkAccent,
-                        size: 10, weight: FontWeight.w500),
+                    style: monoStyle(
+                      state.inkAccent,
+                      size: 10,
+                      weight: FontWeight.w500,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -469,8 +474,11 @@ class _FooterBar extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: state.accent,
                   ),
-                  child: const Icon(Icons.arrow_forward,
-                      color: Colors.white, size: 14),
+                  child: const Icon(
+                    Icons.arrow_forward,
+                    color: Colors.white,
+                    size: 14,
+                  ),
                 ),
               ],
             ),
@@ -641,13 +649,6 @@ class _RailRow extends StatelessWidget {
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard();
 
-  // [value, label, link] — the rating links to the profile that backs it.
-  static const _stats = [
-    ["7", "projects", ""],
-    ["5", "roles", ""],
-    ["1868", "leetcode", leetCode],
-  ];
-
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
@@ -670,8 +671,9 @@ class _ProfileCard extends StatelessWidget {
                       border: Border.all(color: Colors.white, width: 3),
                       boxShadow: [
                         BoxShadow(
-                            color: state.accent.withOpacity(0.4),
-                            blurRadius: 22),
+                          color: state.accent.withOpacity(0.4),
+                          blurRadius: 22,
+                        ),
                       ],
                     ),
                     child: ClipOval(
@@ -690,36 +692,19 @@ class _ProfileCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 18),
-                  Text("Nikhil Yadav",
-                      style: displayStyle(state.inkAccent, size: 28)),
+                  Text(
+                    "Nikhil Yadav",
+                    style: displayStyle(state.inkAccent, size: 28),
+                  ),
                   const SizedBox(height: 6),
                   Text(
-                    "Building AI agents & mobile apps",
+                    developerTagline,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       color: state.textMuted,
                       fontSize: 12.5,
                       height: 1.4,
                     ),
-                  ),
-                  const SizedBox(height: 22),
-                  // Proof strip — the numbers do the talking the empty space
-                  // used to. Mono so they read as a readout, not as copy.
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      for (int i = 0; i < _stats.length; i++) ...[
-                        if (i > 0)
-                          Container(
-                            width: 1,
-                            height: 26,
-                            color: state.hairline,
-                            margin: const EdgeInsets.symmetric(horizontal: 14),
-                          ),
-                        _stat(context, state, _stats[i][0], _stats[i][1],
-                            _stats[i][2]),
-                      ],
-                    ],
                   ),
                   const SizedBox(height: 22),
                   SocialRow(
@@ -738,37 +723,13 @@ class _ProfileCard extends StatelessWidget {
             offset: Offset(0, t * 24),
             child: _FooterBar(
               label: "view profile",
-              onTap: () => context
-                  .read<CurrentState>()
-                  .changePhoneScreen(const AboutDetail(), true),
+              onTap: () => context.read<CurrentState>().changePhoneScreen(
+                const AboutDetail(),
+                true,
+              ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _stat(BuildContext context, CurrentState state, String value,
-      String label, String link) {
-    final Widget body = Column(
-      children: [
-        Text(value,
-            style: monoStyle(state.inkAccent, size: 15, weight: FontWeight.w600)),
-        const SizedBox(height: 3),
-        Text(label, style: monoStyle(state.textMuted, size: 8.5)),
-      ],
-    );
-    if (link.isEmpty) return body;
-    return Semantics(
-      link: true,
-      label: "$label profile",
-      child: MouseRegion(
-        cursor: SystemMouseCursors.click,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => context.read<CurrentState>().launchInBrowser(link),
-          child: body,
-        ),
       ),
     );
   }
@@ -793,9 +754,10 @@ class _ExperienceCard extends StatelessWidget {
       pulse: true,
       title: "Experience",
       footerLabel: "view timeline",
-      onFooterTap: () => context
-          .read<CurrentState>()
-          .changePhoneScreen(const ExperienceDetail(), true),
+      onFooterTap: () => context.read<CurrentState>().changePhoneScreen(
+        const ExperienceDetail(),
+        true,
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -818,35 +780,37 @@ class _ExperienceCard extends StatelessWidget {
 class _ProjectsCard extends StatelessWidget {
   const _ProjectsCard();
 
-  // [monogram, name, subtitle] — the six strongest builds; the seventh lives
-  // in the gallery, which the footer says out loud.
+  // [monogram, name, subtitle] — the six strongest builds; the rest live in
+  // the gallery, which the footer says out loud.
   static const _projects = [
     ["PB", "PillBin", "Offline-first medicine manager"],
     ["TM", "TrialMatch", "AI clinical trial matching"],
+    ["PX", "Procurix", "Agentic procurement for SMEs"],
     ["SB", "Storyboardiac", "AI screenwriting & storyboards"],
     ["CC", "ChatConnect", "Real-time chat, voice & video"],
     ["CD", "Code DNA", "GitHub profile as an organism"],
-    ["SE", "SplitEase", "Real-time expense splitting"],
   ];
 
   @override
   Widget build(BuildContext context) {
     final state = context.watch<CurrentState>();
     return _CardScaffold(
-      eyebrow: "7 builds · 6 shown",
+      eyebrow: "8 builds · 6 shown",
       title: "Projects",
-      footerLabel: "view gallery · +1 more",
-      onFooterTap: () => context
-          .read<CurrentState>()
-          .changePhoneScreen(const ProjectsDetail(), true),
+      footerLabel: "view gallery · +2 more",
+      onFooterTap: () => context.read<CurrentState>().changePhoneScreen(
+        const ProjectsDetail(),
+        true,
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           for (int i = 0; i < _projects.length; i++)
             Padding(
-              padding:
-                  EdgeInsets.only(bottom: i == _projects.length - 1 ? 0 : 32),
+              padding: EdgeInsets.only(
+                bottom: i == _projects.length - 1 ? 0 : 32,
+              ),
               child: Row(
                 children: [
                   _MonoTile(_projects[i][0]),
@@ -855,15 +819,19 @@ class _ProjectsCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_projects[i][1],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: rowTitleStyle(state.textPrimary)),
+                        Text(
+                          _projects[i][1],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: rowTitleStyle(state.textPrimary),
+                        ),
                         const SizedBox(height: 1),
-                        Text(_projects[i][2],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: rowSubStyle(state.textMuted)),
+                        Text(
+                          _projects[i][2],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: rowSubStyle(state.textMuted),
+                        ),
                       ],
                     ),
                   ),
@@ -893,9 +861,10 @@ class _SkillsCard extends StatelessWidget {
       eyebrow: "stack · 8 primary",
       title: "Skills",
       footerLabel: "view stack",
-      onFooterTap: () => context
-          .read<CurrentState>()
-          .changePhoneScreen(const SkillsDetail(), true),
+      onFooterTap: () => context.read<CurrentState>().changePhoneScreen(
+        const SkillsDetail(),
+        true,
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -910,7 +879,9 @@ class _SkillsCard extends StatelessWidget {
                 for (final s in g[1].split(","))
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 11, vertical: 6),
+                      horizontal: 11,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: state.chipFill,
                       borderRadius: BorderRadius.circular(18),
@@ -934,11 +905,18 @@ class _SkillsCard extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  child: _readout(context, state, "1868", "leetcode · knight",
-                      link: leetCode)),
+                child: _readout(
+                  context,
+                  state,
+                  "1868",
+                  "leetcode · knight",
+                  link: leetCode,
+                ),
+              ),
               const SizedBox(width: 10),
               Expanded(
-                  child: _readout(context, state, "1616", "codechef · 3★")),
+                child: _readout(context, state, "1616", "codechef · 3★"),
+              ),
             ],
           ),
         ],
@@ -947,8 +925,12 @@ class _SkillsCard extends StatelessWidget {
   }
 
   Widget _readout(
-      BuildContext context, CurrentState state, String value, String label,
-      {String? link}) {
+    BuildContext context,
+    CurrentState state,
+    String value,
+    String label, {
+    String? link,
+  }) {
     final Widget tile = Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
@@ -959,8 +941,14 @@ class _SkillsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(value,
-              style: monoStyle(state.inkAccent, size: 17, weight: FontWeight.w600)),
+          Text(
+            value,
+            style: monoStyle(
+              state.inkAccent,
+              size: 17,
+              weight: FontWeight.w600,
+            ),
+          ),
           const SizedBox(height: 3),
           Text(label, style: monoStyle(state.textMuted, size: 8.5)),
         ],
@@ -999,9 +987,10 @@ class _EducationCard extends StatelessWidget {
       title: "Education",
       bodyAlign: Alignment.centerLeft,
       footerLabel: "view degrees",
-      onFooterTap: () => context
-          .read<CurrentState>()
-          .changePhoneScreen(const EducationDetail(), true),
+      onFooterTap: () => context.read<CurrentState>().changePhoneScreen(
+        const EducationDetail(),
+        true,
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1056,9 +1045,10 @@ class _AchievementsCard extends StatelessWidget {
       eyebrow: "5 awards · 2 first place",
       title: "Achievements",
       footerLabel: "view all",
-      onFooterTap: () => context
-          .read<CurrentState>()
-          .changePhoneScreen(const AchievementsDetail(), true),
+      onFooterTap: () => context.read<CurrentState>().changePhoneScreen(
+        const AchievementsDetail(),
+        true,
+      ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1073,11 +1063,15 @@ class _AchievementsCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("1st Prize — YPIPA Hackathon",
-                        style: displayStyle(state.inkAccent, size: 16.5)),
+                    Text(
+                      "1st Prize — YPIPA Hackathon",
+                      style: displayStyle(state.inkAccent, size: 16.5),
+                    ),
                     const SizedBox(height: 3),
-                    Text("pillbin · 20+ teams",
-                        style: monoStyle(state.textMuted)),
+                    Text(
+                      "pillbin · 20+ teams",
+                      style: monoStyle(state.textMuted),
+                    ),
                   ],
                 ),
               ),
@@ -1088,8 +1082,9 @@ class _AchievementsCard extends StatelessWidget {
           const SizedBox(height: 18),
           for (int ai = 0; ai < _items.length; ai++)
             Padding(
-              padding:
-                  EdgeInsets.only(bottom: ai == _items.length - 1 ? 0 : 46),
+              padding: EdgeInsets.only(
+                bottom: ai == _items.length - 1 ? 0 : 46,
+              ),
               child: Row(
                 children: [
                   _IconTile(_iconFor(_items[ai][3])),
@@ -1098,15 +1093,19 @@ class _AchievementsCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_items[ai][1],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: rowTitleStyle(state.textPrimary)),
+                        Text(
+                          _items[ai][1],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: rowTitleStyle(state.textPrimary),
+                        ),
                         const SizedBox(height: 1),
-                        Text(_items[ai][2],
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: rowSubStyle(state.textMuted)),
+                        Text(
+                          _items[ai][2],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: rowSubStyle(state.textMuted),
+                        ),
                       ],
                     ),
                   ),

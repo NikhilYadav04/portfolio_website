@@ -41,6 +41,22 @@ class ProjectsDetail extends StatelessWidget {
       url: "https://github.com/NikhilYadav04/clinical_trial",
     ),
     _Project(
+      name: "Procurix",
+      initials: "PX",
+      tagline: "Agentic procurement for Indian SMEs",
+      desc:
+          "Say what you need to buy and the agent does the rest: emails RFPs "
+          "from your Gmail, reads supplier quotes from PDFs and photographs, "
+          "ranks them on your weights and drafts the purchase order. Then it "
+          "watches the Section 43B(h) payment deadline, so paying a small "
+          "supplier late never costs the tax deduction. Built for WCC "
+          "Launchpad 30, Agentic AI track.",
+      tech: ["LangGraph", "Gemini", "Next.js", "Supabase"],
+      icon: Icons.request_quote_outlined,
+      banner: "assets/proj/procurix.png",
+      url: "https://github.com/NikhilYadav04/procurement_ai",
+    ),
+    _Project(
       name: "Storyboardiac",
       initials: "SB",
       tagline: "AI screenwriting & storyboard generation",
@@ -118,9 +134,7 @@ class ProjectsDetail extends StatelessWidget {
     return DetailScaffold(
       title: "Projects",
       eyebrow: "${_projects.length} builds · curated",
-      children: [
-        for (final p in _projects) _ProjectCard(project: p),
-      ],
+      children: [for (final p in _projects) _ProjectCard(project: p)],
     );
   }
 }
@@ -239,22 +253,34 @@ class _ProjectCard extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(project.name,
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 16,
-                                        shadows: const [
-                                          Shadow(blurRadius: 6, color: Colors.black54)
-                                        ])),
-                                Text(project.tagline,
-                                    style: GoogleFonts.inter(
-                                        color: Colors.white.withOpacity(0.92),
-                                        fontSize: 11,
-                                        height: 1.3,
-                                        shadows: const [
-                                          Shadow(blurRadius: 6, color: Colors.black54)
-                                        ])),
+                                Text(
+                                  project.name,
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                    shadows: const [
+                                      Shadow(
+                                        blurRadius: 6,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  project.tagline,
+                                  style: GoogleFonts.inter(
+                                    color: Colors.white.withOpacity(0.92),
+                                    fontSize: 11,
+                                    height: 1.3,
+                                    shadows: const [
+                                      Shadow(
+                                        blurRadius: 6,
+                                        color: Colors.black54,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -270,55 +296,63 @@ class _ProjectCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(project.desc,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.inter(
-                          color: ink.withOpacity(0.8),
-                          fontSize: 12.5,
-                          height: 1.5)),
+                  Text(
+                    project.desc,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      color: ink.withOpacity(0.8),
+                      fontSize: 12.5,
+                      height: 1.5,
+                    ),
+                  ),
                   const SizedBox(height: 12),
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
-                    children:
-                        project.tech.map((t) => SoftChip(label: t)).toList(),
+                    children: project.tech
+                        .map((t) => SoftChip(label: t))
+                        .toList(),
                   ),
                   const SizedBox(height: 14),
-            // View on GitHub.
-            GestureDetector(
-              onTap: () =>
-                  context.read<CurrentState>().launchInBrowser(project.url),
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 13),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.85),
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                  // View on GitHub.
+                  GestureDetector(
+                    onTap: () => context.read<CurrentState>().launchInBrowser(
+                      project.url,
                     ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.code, size: 16, color: state.inkAccent),
-                    const SizedBox(width: 8),
-                    Text("View on GitHub",
-                        style: GoogleFonts.inter(
-                            color: state.inkAccent,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 13,
-                            letterSpacing: 0.5)),
-                  ],
-                ),
-              ),
-            ),
+                    behavior: HitTestBehavior.opaque,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 13),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.85),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.code, size: 16, color: state.inkAccent),
+                          const SizedBox(width: 8),
+                          Text(
+                            "View on GitHub",
+                            style: GoogleFonts.inter(
+                              color: state.inkAccent,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 13,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -339,8 +373,11 @@ class _ProjectCard extends StatelessWidget {
         ),
       ),
       child: Center(
-        child: Icon(project.icon,
-            size: 56, color: Colors.white.withOpacity(0.35)),
+        child: Icon(
+          project.icon,
+          size: 56,
+          color: Colors.white.withOpacity(0.35),
+        ),
       ),
     );
   }
@@ -352,7 +389,9 @@ class _ProjectCard extends StatelessWidget {
 Widget _monogram(BuildContext context, String initials) {
   final state = context.watch<CurrentState>();
   return Center(
-    child: Text(initials,
-        style: monoStyle(state.inkAccent, size: 13, weight: FontWeight.w600)),
+    child: Text(
+      initials,
+      style: monoStyle(state.inkAccent, size: 13, weight: FontWeight.w600),
+    ),
   );
 }

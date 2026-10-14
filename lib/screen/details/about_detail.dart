@@ -16,7 +16,7 @@ class AboutDetail extends StatelessWidget {
 
   // [value, label, link] — the rating links to the profile that backs it.
   static const _stats = [
-    ["7", "projects", ""],
+    ["8", "projects", ""],
     ["5", "roles", ""],
     ["1868", "leetcode", leetCode],
   ];
@@ -65,7 +65,8 @@ class AboutDetail extends StatelessWidget {
         const SizedBox(height: 5),
         Center(
           child: Text(
-            "Building AI agents & mobile apps",
+            developerTagline,
+            textAlign: TextAlign.center,
             style: rowSubStyle(state.textMuted, size: 12.5),
           ),
         ),

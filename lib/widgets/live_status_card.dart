@@ -129,9 +129,23 @@ class _LiveStatusCardState extends State<LiveStatusCard> {
                   style: monoStyle(dim, size: 9.5),
                 ),
                 const SizedBox(height: 7),
-                _ContributionGrid(grid: _contrib!.levels, accent: accent),
-              ],
-              const Spacer(),
+                // Takes the space above the social row and scales the grid down
+                // when the panel is short, instead of overflowing it.
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.topLeft,
+                      child: _ContributionGrid(
+                        grid: _contrib!.levels,
+                        accent: accent,
+                      ),
+                    ),
+                  ),
+                ),
+              ] else
+                const Spacer(),
               SocialRow(
                 iconColor: Colors.white,
                 fill: Colors.white.withOpacity(0.10),
