@@ -23,7 +23,7 @@ class ProjectsDetail extends StatelessWidget {
       tech: ["Flutter", "Agno", "RAG", "Node.js"],
       icon: Icons.medication_outlined,
       logo: "assets/app/pillbin.webp",
-      banner: "assets/proj/pillbin.png",
+      banner: "assets/proj/pillbin.jpg",
       url: "https://github.com/NikhilYadav04/pillbin_v2",
     ),
     _Project(
@@ -37,7 +37,7 @@ class ProjectsDetail extends StatelessWidget {
           "profile parsing to ranking and report generation.",
       tech: ["Multi-Agent", "RAG", "ClinicalTrials.gov", "Python"],
       icon: Icons.biotech_outlined,
-      banner: "assets/proj/trial.png",
+      banner: "assets/proj/trial.jpg",
       url: "https://github.com/NikhilYadav04/clinical_trial",
     ),
     _Project(
@@ -53,7 +53,7 @@ class ProjectsDetail extends StatelessWidget {
           "Launchpad 30, Agentic AI track.",
       tech: ["LangGraph", "Gemini", "Next.js", "Supabase"],
       icon: Icons.request_quote_outlined,
-      banner: "assets/proj/procurix.png",
+      banner: "assets/proj/procurix.jpg",
       url: "https://github.com/NikhilYadav04/procurement_ai",
     ),
     _Project(
@@ -68,7 +68,7 @@ class ProjectsDetail extends StatelessWidget {
       tech: ["Django", "Azure OpenAI", "FLUX.2-Pro", "WebSockets"],
       icon: Icons.movie_filter_outlined,
       logo: "assets/app/story.png",
-      banner: "assets/proj/story.png",
+      banner: "assets/proj/story.jpg",
       url: "https://github.com/NikhilYadav04/storyboardiac",
     ),
     _Project(
@@ -82,7 +82,7 @@ class ProjectsDetail extends StatelessWidget {
           "call lifecycle, cache-first offline support and FCM notifications.",
       tech: ["Flutter", "Socket.IO", "WebRTC", "Node.js"],
       icon: Icons.chat_bubble_outline,
-      banner: "assets/proj/chatconnect.png",
+      banner: "assets/proj/chatconnect.jpg",
       url: "https://github.com/NikhilYadav04/chat_connect",
     ),
     _Project(
@@ -96,7 +96,7 @@ class ProjectsDetail extends StatelessWidget {
           "developer comparison, share/export, and deep linking.",
       tech: ["Flutter", "GitHub API", "Animations", "Deep Links"],
       icon: Icons.biotech,
-      banner: "assets/proj/codedna.png",
+      banner: "assets/proj/codedna.jpg",
       url: "https://github.com/NikhilYadav04/code_dna",
     ),
     _Project(
@@ -110,7 +110,7 @@ class ProjectsDetail extends StatelessWidget {
           "one-tap PDF export. JWT auth with silent token refresh.",
       tech: ["Flutter", "WebSocket", "JWT", "Puppeteer"],
       icon: Icons.receipt_long_outlined,
-      banner: "assets/proj/splitease.png",
+      banner: "assets/proj/splitease.jpg",
       url: "https://github.com/NikhilYadav04/split_ease",
     ),
     _Project(
@@ -124,7 +124,7 @@ class ProjectsDetail extends StatelessWidget {
           "real-time video calls. Feature-first clean architecture.",
       tech: ["Flutter", "Node.js", "MongoDB", "GoRouter"],
       icon: Icons.fingerprint,
-      banner: "assets/proj/attend.png",
+      banner: "assets/proj/attend.jpg",
       url: "https://github.com/NikhilYadav04/attend_ease",
     ),
   ];

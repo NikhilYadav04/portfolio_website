@@ -1,1 +1,2 @@
-Drop project banner images here: pillbin.png, trial.png, story.png, chatconnect.png, codedna.png, splitease.png, attend.png (16:9 ratio)
+Project banners, 16:9, as JPEG about 1200px wide (keeps the gallery light):
+pillbin.jpg, trial.jpg, procurix.jpg, story.jpg, chatconnect.jpg, codedna.jpg, splitease.jpg, attend.jpg

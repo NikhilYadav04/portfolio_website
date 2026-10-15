@@ -31,7 +31,9 @@ class _BootScreenState extends State<BootScreen>
     super.initState();
     _c = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3400),
+      // Short on purpose: the HTML splash in web/index.html already covers
+      // the download, so this is a flourish, not more waiting.
+      duration: const Duration(milliseconds: 1400),
     );
 
     // Beats are spaced so each stage is readable: glyph settles, name + tagline
